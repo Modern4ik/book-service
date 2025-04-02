@@ -1,16 +1,18 @@
 package com.booksAPI.booksAPI.repository;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.time.Year;
 
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
-@Table(name = "lib_books")
-public class LibBook {
+@Table(name = "books")
+public class Book {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,15 +23,6 @@ public class LibBook {
     @Column(name = "author_name")
     private String authorName;
     @Column(name = "publication_year")
-    private Year publicationYear;
+    private Integer publicationYear;
 
-    public LibBook() {
-    }
-
-    public LibBook(Long id, String bookName, String authorName, Year publicationYear) {
-        this.id = id;
-        this.bookName = bookName;
-        this.authorName = authorName;
-        this.publicationYear = publicationYear;
-    }
 }

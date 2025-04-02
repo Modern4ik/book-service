@@ -1,0 +1,24 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-books-table
+      author: Modern4ik
+      changes:
+        - createTable:
+            tableName: books
+            columns:
+              - column:
+                  name: id
+                  type: BIGSERIAL
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: book_name
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: author_name
+                  type: VARCHAR(100)
+              - column:
+                  name: publication_year
+                  type: INTEGER
