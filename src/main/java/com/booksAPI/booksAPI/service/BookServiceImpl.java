@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -23,24 +22,25 @@ public class BookServiceImpl implements BookService {
         bookRepository.save(mappingUtils.mapToBookEntity(bookDto));
     }
 
-    public List<Book> getAllBooks() {
-        return bookRepository.findAll();
+    public List<BookDto> getAllBooks() {
+        return mappingUtils.mapToListOfBookDto(bookRepository.findAll());
     }
 
-    public Optional<Book> getBookById(Long id) {
-        return bookRepository.findById(id);
+    public BookDto getBookById(Long id) {
+        return mappingUtils.mapToBookDto(bookRepository.findById(id).orElseThrow(() ->
+                new EntityNotFoundException("Book with id: %d not exists!".formatted(id))));
     }
 
-    public List<Book> getBooksByAuthorName(String authorName) {
-        return bookRepository.findBooksByAuthorName(authorName);
+    public List<BookDto> getBooksByAuthorName(String authorName) {
+        return mappingUtils.mapToListOfBookDto(bookRepository.findBooksByAuthorName(authorName));
     }
 
-    public List<Book> getBooksByBookName(String bookName) {
-        return bookRepository.findBooksByBookName(bookName);
+    public List<BookDto> getBooksByBookName(String bookName) {
+        return mappingUtils.mapToListOfBookDto(bookRepository.findBooksByBookName(bookName));
     }
 
-    public List<Book> getBooksByPublicationYear(Integer year) {
-        return bookRepository.findBooksByPublicationYear(year);
+    public List<BookDto> getBooksByPublicationYear(Integer year) {
+        return mappingUtils.mapToListOfBookDto(bookRepository.findBooksByPublicationYear(year));
     }
 
     @Transactional

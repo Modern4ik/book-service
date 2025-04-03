@@ -1,6 +1,5 @@
 package com.booksAPI.booksAPI.controller;
 
-import com.booksAPI.booksAPI.repository.Book;
 import com.booksAPI.booksAPI.repository.dto.BookDto;
 import com.booksAPI.booksAPI.service.BookService;
 import lombok.RequiredArgsConstructor;
@@ -21,27 +20,27 @@ public class BookController {
     }
 
     @GetMapping
-    public List<Book> getAllBooks() {
+    public List<BookDto> getAllBooks() {
         return bookService.getAllBooks();
     }
 
     @GetMapping(path = "{id}")
-    public Book getBookById(@PathVariable Long id) {
-        return bookService.getBookById(id).orElse(null);
+    public BookDto getBookById(@PathVariable Long id) {
+        return bookService.getBookById(id);
     }
 
     @GetMapping(path = "by-author/{authorName}")
-    public List<Book> getBooksByAuthorName(@PathVariable String authorName) {
+    public List<BookDto> getBooksByAuthorName(@PathVariable String authorName) {
         return bookService.getBooksByAuthorName(authorName);
     }
 
     @GetMapping(path = "by-book-name/{bookName}")
-    public List<Book> getBooksByBookName(@PathVariable String bookName) {
+    public List<BookDto> getBooksByBookName(@PathVariable String bookName) {
         return bookService.getBooksByBookName(bookName);
     }
 
     @GetMapping(path = "by-publication-year/{year}")
-    public List<Book> getBooksByPublicationYear(@PathVariable Integer year) {
+    public List<BookDto> getBooksByPublicationYear(@PathVariable Integer year) {
         return bookService.getBooksByPublicationYear(year);
     }
 
