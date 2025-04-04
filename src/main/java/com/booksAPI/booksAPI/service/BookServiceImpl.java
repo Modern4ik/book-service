@@ -3,7 +3,7 @@ package com.booksAPI.booksAPI.service;
 import com.booksAPI.booksAPI.repository.BookRepository;
 import com.booksAPI.booksAPI.repository.Book;
 import com.booksAPI.booksAPI.repository.dto.BookDto;
-import com.booksAPI.booksAPI.service.utils.MappingUtils;
+import com.booksAPI.booksAPI.service.mappers.BookMapper;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -16,31 +16,30 @@ import java.util.List;
 public class BookServiceImpl implements BookService {
 
     private final BookRepository bookRepository;
-    private final MappingUtils mappingUtils;
 
     public void saveNewBook(BookDto bookDto) {
-        bookRepository.save(mappingUtils.mapToBookEntity(bookDto));
+        bookRepository.save(BookMapper.INSTANCE.toEntity(bookDto));
     }
 
     public List<BookDto> getAllBooks() {
-        return mappingUtils.mapToListOfBookDto(bookRepository.findAll());
+        return BookMapper.INSTANCE.mapToDto(bookRepository.findAll());
     }
 
     public BookDto getBookById(Long id) {
-        return mappingUtils.mapToBookDto(bookRepository.findById(id).orElseThrow(() ->
+        return BookMapper.INSTANCE.toDto(bookRepository.findById(id).orElseThrow(() ->
                 new EntityNotFoundException("Book with id: %d not exists!".formatted(id))));
     }
 
     public List<BookDto> getBooksByAuthorName(String authorName) {
-        return mappingUtils.mapToListOfBookDto(bookRepository.findBooksByAuthorName(authorName));
+        return BookMapper.INSTANCE.mapToDto(bookRepository.findBooksByAuthorName(authorName));
     }
 
     public List<BookDto> getBooksByBookName(String bookName) {
-        return mappingUtils.mapToListOfBookDto(bookRepository.findBooksByBookName(bookName));
+        return BookMapper.INSTANCE.mapToDto(bookRepository.findBooksByBookName(bookName));
     }
 
     public List<BookDto> getBooksByPublicationYear(Integer year) {
-        return mappingUtils.mapToListOfBookDto(bookRepository.findBooksByPublicationYear(year));
+        return BookMapper.INSTANCE.mapToDto(bookRepository.findBooksByPublicationYear(year));
     }
 
     @Transactional
