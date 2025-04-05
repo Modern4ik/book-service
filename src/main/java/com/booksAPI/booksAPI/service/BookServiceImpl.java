@@ -16,30 +16,31 @@ import java.util.List;
 public class BookServiceImpl implements BookService {
 
     private final BookRepository bookRepository;
+    private final BookMapper bookMapper;
 
     public void saveNewBook(BookDto bookDto) {
-        bookRepository.save(BookMapper.INSTANCE.toEntity(bookDto));
+        bookRepository.save(bookMapper.toEntity(bookDto));
     }
 
     public List<BookDto> getAllBooks() {
-        return BookMapper.INSTANCE.mapToDto(bookRepository.findAll());
+        return bookMapper.mapToDto(bookRepository.findAll());
     }
 
     public BookDto getBookById(Long id) {
-        return BookMapper.INSTANCE.toDto(bookRepository.findById(id).orElseThrow(() ->
+        return bookMapper.toDto(bookRepository.findById(id).orElseThrow(() ->
                 new EntityNotFoundException("Book with id: %d not exists!".formatted(id))));
     }
 
     public List<BookDto> getBooksByAuthorName(String authorName) {
-        return BookMapper.INSTANCE.mapToDto(bookRepository.findBooksByAuthorName(authorName));
+        return bookMapper.mapToDto(bookRepository.findBooksByAuthorName(authorName));
     }
 
     public List<BookDto> getBooksByBookName(String bookName) {
-        return BookMapper.INSTANCE.mapToDto(bookRepository.findBooksByBookName(bookName));
+        return bookMapper.mapToDto(bookRepository.findBooksByBookName(bookName));
     }
 
     public List<BookDto> getBooksByPublicationYear(Integer year) {
-        return BookMapper.INSTANCE.mapToDto(bookRepository.findBooksByPublicationYear(year));
+        return bookMapper.mapToDto(bookRepository.findBooksByPublicationYear(year));
     }
 
     @Transactional
