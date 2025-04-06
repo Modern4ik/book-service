@@ -1,6 +1,6 @@
-package com.booksAPI.booksAPI.service;
+package com.books.holder.service;
 
-import com.booksAPI.booksAPI.repository.dto.BookDto;
+import com.books.holder.dto.BookDto;
 
 import java.util.List;
 

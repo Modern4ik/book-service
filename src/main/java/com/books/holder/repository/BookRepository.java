@@ -1,4 +1,4 @@
-package com.booksAPI.booksAPI.repository;
+package com.books.holder.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

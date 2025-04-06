@@ -1,9 +1,9 @@
-package com.booksAPI.booksAPI.service;
+package com.books.holder.service;
 
-import com.booksAPI.booksAPI.repository.BookRepository;
-import com.booksAPI.booksAPI.repository.Book;
-import com.booksAPI.booksAPI.repository.dto.BookDto;
-import com.booksAPI.booksAPI.service.mappers.BookMapper;
+import com.books.holder.repository.BookRepository;
+import com.books.holder.repository.Book;
+import com.books.holder.dto.BookDto;
+import com.books.holder.mappers.BookMapper;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -45,8 +45,8 @@ public class BookServiceImpl implements BookService {
 
     @Transactional
     public void updateBookById(BookDto bookDto) {
-        Book bookWithId = bookRepository.findById(bookDto.getId()).orElseThrow(() ->
-                new EntityNotFoundException("Book with id: %d not exists!".formatted(bookDto.getId())));
+        Book bookWithId = bookRepository.findById(bookDto.id()).orElseThrow(() ->
+                new EntityNotFoundException("Book with id: %d not exists!".formatted(bookDto.id())));
 
         updateBook(bookWithId, bookDto);
     }
@@ -56,16 +56,16 @@ public class BookServiceImpl implements BookService {
     }
 
     private void updateBook(Book currBook, BookDto bookDto) {
-        if (isCanSetBookName(currBook, bookDto.getBookName())) {
-            currBook.setBookName(bookDto.getBookName());
+        if (isCanSetBookName(currBook, bookDto.bookName())) {
+            currBook.setBookName(bookDto.bookName());
         }
 
-        if (isCanSetAuthorName(currBook, bookDto.getAuthorName())) {
-            currBook.setAuthorName(bookDto.getAuthorName());
+        if (isCanSetAuthorName(currBook, bookDto.authorName())) {
+            currBook.setAuthorName(bookDto.authorName());
         }
 
-        if (isCanSetPublicationYear(currBook, bookDto.getPublicationYear())) {
-            currBook.setPublicationYear(bookDto.getPublicationYear());
+        if (isCanSetPublicationYear(currBook, bookDto.publicationYear())) {
+            currBook.setPublicationYear(bookDto.publicationYear());
         }
     }
 

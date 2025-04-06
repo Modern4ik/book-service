@@ -1,7 +1,7 @@
-package com.booksAPI.booksAPI.service.mappers;
+package com.books.holder.mappers;
 
-import com.booksAPI.booksAPI.repository.Book;
-import com.booksAPI.booksAPI.repository.dto.BookDto;
+import com.books.holder.repository.Book;
+import com.books.holder.dto.BookDto;
 import org.mapstruct.Mapper;
 
 import java.util.List;

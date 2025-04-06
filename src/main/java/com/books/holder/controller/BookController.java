@@ -1,7 +1,7 @@
-package com.booksAPI.booksAPI.controller;
+package com.books.holder.controller;
 
-import com.booksAPI.booksAPI.repository.dto.BookDto;
-import com.booksAPI.booksAPI.service.BookService;
+import com.books.holder.dto.BookDto;
+import com.books.holder.service.BookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,17 +29,17 @@ public class BookController {
         return bookService.getBookById(id);
     }
 
-    @GetMapping(path = "by-author/{authorName}")
+    @GetMapping(path = "/by-author/{authorName}")
     public List<BookDto> getBooksByAuthorName(@PathVariable String authorName) {
         return bookService.getBooksByAuthorName(authorName);
     }
 
-    @GetMapping(path = "by-book-name/{bookName}")
+    @GetMapping(path = "/by-book-name/{bookName}")
     public List<BookDto> getBooksByBookName(@PathVariable String bookName) {
         return bookService.getBooksByBookName(bookName);
     }
 
-    @GetMapping(path = "by-publication-year/{year}")
+    @GetMapping(path = "/by-publication-year/{year}")
     public List<BookDto> getBooksByPublicationYear(@PathVariable Integer year) {
         return bookService.getBooksByPublicationYear(year);
     }
