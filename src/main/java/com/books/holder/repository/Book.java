@@ -1,4 +1,4 @@
-package com.booksAPI.booksAPI.repository;
+package com.books.holder.repository;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
