@@ -1,6 +1,9 @@
 package com.books.holder.controller;
 
-import com.books.holder.dto.BookDto;
+import com.books.holder.dto.book.BookCreateDto;
+import com.books.holder.dto.book.BookFilterDto;
+import com.books.holder.dto.book.BookReadDto;
+import com.books.holder.dto.book.BookUpdateDto;
 import com.books.holder.service.BookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -15,41 +18,26 @@ public class BookController {
     private final BookService bookService;
 
     @PostMapping
-    public void saveNewBook(@RequestBody BookDto bookDto) {
-        bookService.saveNewBook(bookDto);
+    public void saveBook(@RequestBody BookCreateDto bookCreateDto) {
+        bookService.saveBook(bookCreateDto);
     }
 
-    @GetMapping
-    public List<BookDto> getAllBooks() {
-        return bookService.getAllBooks();
-    }
-
-    @GetMapping(path = "{id}")
-    public BookDto getBookById(@PathVariable Long id) {
+    @GetMapping(path = "/{id}")
+    public BookReadDto getBookById(@PathVariable Long id) {
         return bookService.getBookById(id);
     }
 
-    @GetMapping(path = "/by-author/{authorName}")
-    public List<BookDto> getBooksByAuthorName(@PathVariable String authorName) {
-        return bookService.getBooksByAuthorName(authorName);
+    @GetMapping
+    public List<BookReadDto> getBooks(@RequestBody BookFilterDto bookFilterDto) {
+        return bookService.getBooks(bookFilterDto);
     }
 
-    @GetMapping(path = "/by-book-name/{bookName}")
-    public List<BookDto> getBooksByBookName(@PathVariable String bookName) {
-        return bookService.getBooksByBookName(bookName);
+    @PutMapping("/{id}")
+    public void updateBookById(@PathVariable Long id, @RequestBody BookUpdateDto bookUpdateDto) {
+        bookService.updateBookById(id, bookUpdateDto);
     }
 
-    @GetMapping(path = "/by-publication-year/{year}")
-    public List<BookDto> getBooksByPublicationYear(@PathVariable Integer year) {
-        return bookService.getBooksByPublicationYear(year);
-    }
-
-    @PutMapping
-    public void updateBookById(@RequestBody BookDto bookDto) {
-        bookService.updateBookById(bookDto);
-    }
-
-    @DeleteMapping(path = "{id}")
+    @DeleteMapping(path = "/{id}")
     public void deleteBookById(@PathVariable Long id) {
         bookService.deleteBookById(id);
     }

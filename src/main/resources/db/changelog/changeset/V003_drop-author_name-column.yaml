@@ -1,0 +1,8 @@
+databaseChangeLog:
+  - changeSet:
+      id: drop-author_name-column
+      author: Modern4ik
+      changes:
+        - dropColumn:
+            columnName: author_name
+            tableName: books

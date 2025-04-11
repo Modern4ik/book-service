@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      id: add-author_id-column
+      author: Modern4ik
+      changes:
+        - addColumn:
+            tableName: books
+            columns:
+              - column:
+                  name: author_id
+                  type: INT
+                  constraints:
+                    foreignKeyName: fk_books_authors
+                    references: authors(id)

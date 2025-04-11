@@ -1,13 +1,9 @@
 package com.books.holder.repository;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -20,9 +16,10 @@ public class Book {
 
     @Column(name = "book_name")
     private String bookName;
-    @Column(name = "author_name")
-    private String authorName;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Author author;
+
     @Column(name = "publication_year")
     private Integer publicationYear;
-
 }
