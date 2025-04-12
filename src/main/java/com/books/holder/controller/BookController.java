@@ -1,9 +1,9 @@
 package com.books.holder.controller;
 
-import com.books.holder.dto.book.BookCreateDto;
-import com.books.holder.dto.book.BookFilterDto;
-import com.books.holder.dto.book.BookReadDto;
-import com.books.holder.dto.book.BookUpdateDto;
+import com.books.holder.dto.book.BookRequestCreateDto;
+import com.books.holder.dto.book.BookRequestDto;
+import com.books.holder.dto.book.BookResponseDto;
+import com.books.holder.dto.book.BookRequestUpdateDto;
 import com.books.holder.service.BookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -11,30 +11,30 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/books")
+@RequestMapping("/api/v1/books")
 @RequiredArgsConstructor
 public class BookController {
 
     private final BookService bookService;
 
     @PostMapping
-    public void saveBook(@RequestBody BookCreateDto bookCreateDto) {
-        bookService.saveBook(bookCreateDto);
+    public void saveBook(@RequestBody BookRequestCreateDto bookRequestCreateDto) {
+        bookService.saveBook(bookRequestCreateDto);
     }
 
     @GetMapping(path = "/{id}")
-    public BookReadDto getBookById(@PathVariable Long id) {
+    public BookResponseDto getBookById(@PathVariable Long id) {
         return bookService.getBookById(id);
     }
 
     @GetMapping
-    public List<BookReadDto> getBooks(@RequestBody BookFilterDto bookFilterDto) {
-        return bookService.getBooks(bookFilterDto);
+    public List<BookResponseDto> getBooks(@RequestBody BookRequestDto bookRequestDto) {
+        return bookService.getBooks(bookRequestDto);
     }
 
     @PutMapping("/{id}")
-    public void updateBookById(@PathVariable Long id, @RequestBody BookUpdateDto bookUpdateDto) {
-        bookService.updateBookById(id, bookUpdateDto);
+    public void updateBookById(@PathVariable Long id, @RequestBody BookRequestUpdateDto bookRequestUpdateDto) {
+        bookService.updateBookById(id, bookRequestUpdateDto);
     }
 
     @DeleteMapping(path = "/{id}")

@@ -1,9 +1,8 @@
 package com.books.holder.controller;
 
-import com.books.holder.dto.author.AuthorCreateDto;
-import com.books.holder.dto.author.AuthorFilterDto;
-import com.books.holder.dto.author.AuthorReadDto;
-import com.books.holder.dto.book.BookWithoutAuthorReadDto;
+import com.books.holder.dto.author.AuthorRequestCreateDto;
+import com.books.holder.dto.author.AuthorRequestDto;
+import com.books.holder.dto.author.AuthorResponseDto;
 import com.books.holder.service.AuthorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -11,30 +10,25 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/authors")
+@RequestMapping("/api/v1/authors")
 @RequiredArgsConstructor
 public class AuthorController {
 
     private final AuthorService authorService;
 
     @PostMapping
-    public void saveNewAuthor(@RequestBody AuthorCreateDto authorCreateDto) {
-        authorService.saveNewAuthor(authorCreateDto);
+    public void saveNewAuthor(@RequestBody AuthorRequestCreateDto authorRequestCreateDto) {
+        authorService.saveNewAuthor(authorRequestCreateDto);
     }
 
     @GetMapping(path = "/{id}")
-    public AuthorReadDto getAuthorById(@PathVariable Integer id) {
+    public AuthorResponseDto getAuthorById(@PathVariable Integer id) {
         return authorService.getAuthorById(id);
     }
 
     @GetMapping
-    public List<AuthorReadDto> getAuthors(@RequestBody AuthorFilterDto authorFilterDto){
-        return authorService.getAuthors(authorFilterDto);
-    }
-
-    @GetMapping(path = "/{id}/author-books")
-    public List<BookWithoutAuthorReadDto> getAuthorBooks(@PathVariable Integer id) {
-        return authorService.getAuthorBooks(id);
+    public List<AuthorResponseDto> getAuthors(@RequestBody AuthorRequestDto authorRequestDto){
+        return authorService.getAuthors(authorRequestDto);
     }
 
     @DeleteMapping(path = "/{id}")

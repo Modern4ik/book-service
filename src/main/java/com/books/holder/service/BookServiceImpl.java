@@ -1,13 +1,13 @@
 package com.books.holder.service;
 
-import com.books.holder.dto.book.BookCreateDto;
-import com.books.holder.dto.book.BookFilterDto;
-import com.books.holder.dto.book.BookUpdateDto;
-import com.books.holder.repository.Author;
+import com.books.holder.dto.book.BookRequestCreateDto;
+import com.books.holder.dto.book.BookRequestDto;
+import com.books.holder.dto.book.BookRequestUpdateDto;
+import com.books.holder.entity.Author;
 import com.books.holder.repository.AuthorRepository;
 import com.books.holder.repository.BookRepository;
-import com.books.holder.repository.Book;
-import com.books.holder.dto.book.BookReadDto;
+import com.books.holder.entity.Book;
+import com.books.holder.dto.book.BookResponseDto;
 import com.books.holder.mappers.BookMapper;
 import com.books.holder.specifications.BookSpecification;
 import jakarta.persistence.EntityNotFoundException;
@@ -20,59 +20,54 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
 public class BookServiceImpl implements BookService {
 
-    private final int UNKNOWN_AUTHOR_ID = 1;
-    private final String AUTHOR_NOT_FOUND_MESSAGE = "Author with ID = %d not found!";
-    private final String BOOK_NOT_FOUND_MESSAGE = "Book with ID = %d not found!";
+    private static final int UNKNOWN_AUTHOR_ID = 1;
+    private static final String AUTHOR_NOT_FOUND_MESSAGE = "Author with ID = %d not found!";
+    private static final String BOOK_NOT_FOUND_MESSAGE = "Book with ID = %d not found!";
 
     private final BookRepository bookRepository;
     private final AuthorRepository authorRepository;
     private final BookMapper bookMapper;
     private final BookSpecification bookSpecification;
 
-    public void saveBook(BookCreateDto bookCreateDto) {
-        int authorId;
-
-        if (bookCreateDto.authorId() == null) {
-            authorId = UNKNOWN_AUTHOR_ID;
-        } else {
-            authorId = bookCreateDto.authorId();
-        }
+    @Transactional
+    public void saveBook(BookRequestCreateDto bookRequestCreateDto) {
+        int authorId = bookRequestCreateDto.authorId();
 
         Author foundedAuthor = authorRepository.findById(authorId).orElseThrow(() ->
                 new EntityNotFoundException(AUTHOR_NOT_FOUND_MESSAGE.formatted(authorId)));
 
-        foundedAuthor.addBook(bookRepository.save(bookMapper.toEntity(bookCreateDto)));
+        foundedAuthor.addBook(bookRepository.save(bookMapper.toEntity(bookRequestCreateDto)));
     }
 
-    public BookReadDto getBookById(Long id) {
+    public BookResponseDto getBookById(Long id) {
         return bookMapper.toDto(bookRepository.findById(id).orElseThrow(() ->
                 new EntityNotFoundException(AUTHOR_NOT_FOUND_MESSAGE.formatted(id))));
     }
 
-    public List<BookReadDto> getBooks(BookFilterDto bookFilterDto) {
-        return bookMapper.mapToReadDto(bookRepository.findAll(
-                generateBookSpec(bookFilterDto)
+    public List<BookResponseDto> getBooks(BookRequestDto bookRequestDto) {
+        return bookMapper.mapToDto(bookRepository.findAll(
+                generateBookSpec(bookRequestDto)
         ));
     }
 
-    public void updateBookById(Long id, BookUpdateDto bookUpdateDto) {
+    public void updateBookById(Long id, BookRequestUpdateDto bookRequestUpdateDto) {
         Book bookWithId = bookRepository.findById(id).orElseThrow(() ->
                 new EntityNotFoundException(BOOK_NOT_FOUND_MESSAGE.formatted(id)));
 
-        updateBook(bookWithId, bookUpdateDto);
+        updateBook(bookWithId, bookRequestUpdateDto);
     }
 
     public void deleteBookById(Long id) {
         bookRepository.deleteById(id);
     }
 
-    private void updateBook(Book currBook, BookUpdateDto bookUpdateDto) {
-        String bookName = bookUpdateDto.bookName();
-        Integer authorId = bookUpdateDto.authorId();
-        Integer publicationYear = bookUpdateDto.publicationYear();
+    @Transactional
+    private void updateBook(Book currBook, BookRequestUpdateDto bookRequestUpdateDto) {
+        String bookName = bookRequestUpdateDto.bookName();
+        Integer authorId = bookRequestUpdateDto.authorId();
+        Integer publicationYear = bookRequestUpdateDto.publicationYear();
 
         if (isCanSetBookName(currBook, bookName)) {
             currBook.setBookName(bookName);
@@ -105,12 +100,12 @@ public class BookServiceImpl implements BookService {
                 || newPublicationYear != null && !currBook.getPublicationYear().equals(newPublicationYear);
     }
 
-    private Specification<Book> generateBookSpec(BookFilterDto bookFilterDto) {
+    private Specification<Book> generateBookSpec(BookRequestDto bookRequestDto) {
         Specification<Book> spec = Specification.where(null);
 
-        String bookName = bookFilterDto.bookName();
-        Integer authorId = bookFilterDto.authorId();
-        Integer publicationYear = bookFilterDto.publicationYear();
+        String bookName = bookRequestDto.bookName();
+        Integer authorId = bookRequestDto.authorId();
+        Integer publicationYear = bookRequestDto.publicationYear();
 
         if (bookName != null && !bookName.isEmpty()) {
             spec = spec.and(bookSpecification.hasBookName(bookName));

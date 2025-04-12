@@ -1,7 +1,7 @@
 package com.books.holder.specifications;
 
-import com.books.holder.repository.Author;
-import com.books.holder.repository.Book;
+import com.books.holder.entity.Author;
+import com.books.holder.entity.Book;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;

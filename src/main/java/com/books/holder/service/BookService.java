@@ -1,21 +1,21 @@
 package com.books.holder.service;
 
-import com.books.holder.dto.book.BookCreateDto;
-import com.books.holder.dto.book.BookFilterDto;
-import com.books.holder.dto.book.BookReadDto;
-import com.books.holder.dto.book.BookUpdateDto;
+import com.books.holder.dto.book.BookRequestCreateDto;
+import com.books.holder.dto.book.BookRequestDto;
+import com.books.holder.dto.book.BookResponseDto;
+import com.books.holder.dto.book.BookRequestUpdateDto;
 
 import java.util.List;
 
 public interface BookService {
 
-    void saveBook(BookCreateDto bookCreateDto);
+    void saveBook(BookRequestCreateDto bookRequestCreateDto);
 
-    BookReadDto getBookById(Long id);
+    BookResponseDto getBookById(Long id);
 
-    List<BookReadDto> getBooks(BookFilterDto bookFilterDto);
+    List<BookResponseDto> getBooks(BookRequestDto bookRequestDto);
 
-    void updateBookById(Long id, BookUpdateDto bookUpdateDto);
+    void updateBookById(Long id, BookRequestUpdateDto bookRequestUpdateDto);
 
     void deleteBookById(Long id);
 }

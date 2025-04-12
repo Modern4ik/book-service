@@ -1,8 +1,8 @@
 package com.books.holder.mappers;
 
-import com.books.holder.dto.author.AuthorCreateDto;
-import com.books.holder.dto.author.AuthorReadDto;
-import com.books.holder.repository.Author;
+import com.books.holder.dto.author.AuthorRequestCreateDto;
+import com.books.holder.dto.author.AuthorResponseDto;
+import com.books.holder.entity.Author;
 import org.mapstruct.Mapper;
 
 import java.util.List;
@@ -10,8 +10,8 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface AuthorMapper {
 
-    AuthorReadDto toReadDto(Author author);
-    Author toEntity(AuthorCreateDto authorCreateDto);
+    AuthorResponseDto toDto(Author author);
+    Author toEntity(AuthorRequestCreateDto authorRequestCreateDto);
 
-    List<AuthorReadDto> mapToReadDto(List<Author> authorList);
+    List<AuthorResponseDto> mapToDto(List<Author> authorList);
 }

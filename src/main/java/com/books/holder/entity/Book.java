@@ -1,4 +1,4 @@
-package com.books.holder.repository;
+package com.books.holder.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -14,10 +14,11 @@ public class Book {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "book_name")
+    @Column(name = "book_name", nullable = false)
     private String bookName;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "author_id")
     private Author author;
 
     @Column(name = "publication_year")
