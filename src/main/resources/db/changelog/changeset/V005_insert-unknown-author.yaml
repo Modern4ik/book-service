@@ -1,0 +1,11 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert-unknown-author
+      author: Modern4ik
+      changes:
+        - insert:
+            tableName: authors
+            columns:
+              - column:
+                  name: first_name
+                  value: "Unknown"

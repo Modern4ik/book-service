@@ -1,13 +1,9 @@
-package com.books.holder.repository;
+package com.books.holder.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -18,11 +14,13 @@ public class Book {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "book_name")
+    @Column(name = "book_name", nullable = false)
     private String bookName;
-    @Column(name = "author_name")
-    private String authorName;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "author_id", nullable = false)
+    private Author author;
+
     @Column(name = "publication_year")
     private Integer publicationYear;
-
 }

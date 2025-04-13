@@ -1,3 +1,13 @@
 databaseChangeLog:
   - include:
       file: db/changelog/changeset/V001_create-books-table.yaml
+  - include:
+      file: db/changelog/changeset/V002_create-authors-table.yaml
+  - include:
+      file: db/changelog/changeset/V003_drop-author_name-column.yaml
+  - include:
+      file: db/changelog/changeset/V004_add-author_id-column.yaml
+  - include:
+      file: db/changelog/changeset/V005_insert-unknown-author.yaml
+  - include:
+      file: db/changelog/changeset/V006_books-not_null-author.yaml

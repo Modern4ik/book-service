@@ -1,0 +1,10 @@
+databaseChangeLog:
+  - changeSet:
+      id: books-not-null-author
+      author: Sergey Zaytsev
+      changes:
+        - addNotNullConstraint:
+            columnDataType: INT
+            columnName: author_id
+            defaultNullValue: 1
+            tableName: books

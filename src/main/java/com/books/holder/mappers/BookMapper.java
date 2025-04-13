@@ -1,18 +1,21 @@
 package com.books.holder.mappers;
 
-import com.books.holder.repository.Book;
-import com.books.holder.dto.BookDto;
+import com.books.holder.dto.book.BookRequestCreateDto;
+import com.books.holder.entity.Book;
+import com.books.holder.dto.book.BookResponseDto;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface BookMapper {
 
-    BookDto toDto(Book book);
-    Book toEntity(BookDto bookDto);
+    @Mapping(target = "authorId", source = "author.id")
+    BookResponseDto toDto(Book book);
 
-    List<BookDto> mapToDto(List<Book> bookList);
-    List<Book> mapToBook(List<BookDto> bookDtoList);
+    Book toEntity(BookRequestCreateDto bookRequestCreateDto);
+
+    List<BookResponseDto> mapToDto(List<Book> books);
 
 }
