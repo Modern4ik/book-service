@@ -11,11 +11,11 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface BookMapper {
 
-    @Mapping(target = "authorId", expression = "java(book.getAuthor().getId())")
+    @Mapping(target = "authorId", source = "author.id")
     BookResponseDto toDto(Book book);
 
     Book toEntity(BookRequestCreateDto bookRequestCreateDto);
 
-    List<BookResponseDto> mapToDto(List<Book> bookList);
+    List<BookResponseDto> mapToDto(List<Book> books);
 
 }
