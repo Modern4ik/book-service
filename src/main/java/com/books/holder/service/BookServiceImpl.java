@@ -38,7 +38,7 @@ public class BookServiceImpl implements BookService {
         Author foundedAuthor = authorRepository.findById(authorId).orElseThrow(() ->
                 new EntityNotFoundException(AUTHOR_NOT_FOUND_MESSAGE.formatted(authorId)));
 
-        foundedAuthor.addBook(bookRepository.save(bookMapper.toEntity(bookRequestCreateDto)));
+        foundedAuthor.addBook(bookMapper.toEntity(bookRequestCreateDto));
     }
 
     public BookResponseDto getBookById(Long id) {
