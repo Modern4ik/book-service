@@ -4,6 +4,7 @@ import com.books.holder.dto.author.AuthorRequestCreateDto;
 import com.books.holder.dto.author.AuthorRequestDto;
 import com.books.holder.dto.author.AuthorResponseDto;
 import com.books.holder.service.AuthorService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,7 +18,7 @@ public class AuthorController {
     private final AuthorService authorService;
 
     @PostMapping
-    public void saveNewAuthor(@RequestBody AuthorRequestCreateDto authorRequestCreateDto) {
+    public void saveNewAuthor(@RequestBody @Valid AuthorRequestCreateDto authorRequestCreateDto) {
         authorService.saveNewAuthor(authorRequestCreateDto);
     }
 
@@ -35,4 +36,5 @@ public class AuthorController {
     public void deleteAuthorById(@PathVariable Integer id) {
         authorService.deleteAuthorById(id);
     }
+
 }
