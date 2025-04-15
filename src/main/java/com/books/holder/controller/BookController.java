@@ -5,6 +5,7 @@ import com.books.holder.dto.book.BookRequestDto;
 import com.books.holder.dto.book.BookResponseDto;
 import com.books.holder.dto.book.BookRequestUpdateDto;
 import com.books.holder.service.BookService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,7 +19,7 @@ public class BookController {
     private final BookService bookService;
 
     @PostMapping
-    public void saveBook(@RequestBody BookRequestCreateDto bookRequestCreateDto) {
+    public void saveBook(@RequestBody @Valid BookRequestCreateDto bookRequestCreateDto) {
         bookService.saveBook(bookRequestCreateDto);
     }
 
