@@ -4,13 +4,10 @@ import com.books.holder.dto.author.AuthorRequestCreateDto;
 import com.books.holder.dto.author.AuthorRequestDto;
 import com.books.holder.dto.author.AuthorResponseDto;
 import com.books.holder.mappers.AuthorMapper;
-import com.books.holder.mappers.BookMapper;
-import com.books.holder.entity.Author;
 import com.books.holder.repository.AuthorRepository;
 import com.books.holder.specifications.AuthorSpecification;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,7 +23,6 @@ public class AuthorServiceImpl implements AuthorService {
     private final AuthorRepository authorRepository;
     private final AuthorSpecification authorSpecification;
     private final AuthorMapper authorMapper;
-    private final BookMapper bookMapper;
 
     public void saveNewAuthor(AuthorRequestCreateDto authorRequestCreateDto) {
         authorRepository.save(authorMapper.toEntity(authorRequestCreateDto));
@@ -39,7 +35,7 @@ public class AuthorServiceImpl implements AuthorService {
 
     public List<AuthorResponseDto> getAuthors(AuthorRequestDto authorRequestDto) {
         return authorMapper.mapToDto(authorRepository.findAll(
-                generateAuthorSpec(authorRequestDto)
+                authorSpecification.generateAuthorSpec(authorRequestDto)
         ));
     }
 
@@ -50,25 +46,4 @@ public class AuthorServiceImpl implements AuthorService {
         authorRepository.deleteById(id);
     }
 
-    private Specification<Author> generateAuthorSpec(AuthorRequestDto authorRequestDto) {
-        Specification<Author> spec = Specification.where(null);
-
-        if (authorRequestDto.firstName() != null && !authorRequestDto.firstName().isEmpty()) {
-            spec = spec.and(authorSpecification.hasFirstName(authorRequestDto.firstName()));
-        }
-
-        if (authorRequestDto.lastName() != null && !authorRequestDto.lastName().isEmpty()) {
-            spec = spec.and(authorSpecification.hasLastName(authorRequestDto.lastName()));
-        }
-
-        if (authorRequestDto.birthday() != null) {
-            spec = spec.and(authorSpecification.hasBirthday(authorRequestDto.birthday()));
-        }
-
-        if (authorRequestDto.country() != null) {
-            spec = spec.and(authorSpecification.hasCountry(authorRequestDto.country()));
-        }
-
-        return spec;
-    }
 }

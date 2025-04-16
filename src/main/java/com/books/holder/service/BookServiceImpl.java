@@ -13,7 +13,6 @@ import com.books.holder.specifications.BookSpecification;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,7 +21,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BookServiceImpl implements BookService {
 
-    private static final int UNKNOWN_AUTHOR_ID = 1;
     private static final String AUTHOR_NOT_FOUND_MESSAGE = "Author with ID = %d not found!";
     private static final String BOOK_NOT_FOUND_MESSAGE = "Book with ID = %d not found!";
 
@@ -43,15 +41,16 @@ public class BookServiceImpl implements BookService {
 
     public BookResponseDto getBookById(Long id) {
         return bookMapper.toDto(bookRepository.findById(id).orElseThrow(() ->
-                new EntityNotFoundException(AUTHOR_NOT_FOUND_MESSAGE.formatted(id))));
+                new EntityNotFoundException(BOOK_NOT_FOUND_MESSAGE.formatted(id))));
     }
 
     public List<BookResponseDto> getBooks(BookRequestDto bookRequestDto) {
         return bookMapper.mapToDto(bookRepository.findAll(
-                generateBookSpec(bookRequestDto)
+                bookSpecification.generateBookSpec(bookRequestDto)
         ));
     }
 
+    @Transactional
     public void updateBookById(Long id, BookRequestUpdateDto bookRequestUpdateDto) {
         Book bookWithId = bookRepository.findById(id).orElseThrow(() ->
                 new EntityNotFoundException(BOOK_NOT_FOUND_MESSAGE.formatted(id)));
@@ -63,7 +62,6 @@ public class BookServiceImpl implements BookService {
         bookRepository.deleteById(id);
     }
 
-    @Transactional
     private void updateBook(Book currBook, BookRequestUpdateDto bookRequestUpdateDto) {
         String bookName = bookRequestUpdateDto.bookName();
         Integer authorId = bookRequestUpdateDto.authorId();
@@ -77,7 +75,6 @@ public class BookServiceImpl implements BookService {
             Author foundedAuthor = authorRepository.findById(authorId).orElseThrow(() ->
                     new EntityNotFoundException(AUTHOR_NOT_FOUND_MESSAGE.formatted(authorId)));
 
-            currBook.getAuthor().removeBook(currBook);
             foundedAuthor.addBook(currBook);
         }
 
@@ -92,7 +89,7 @@ public class BookServiceImpl implements BookService {
     }
 
     private boolean isCanSetAuthor(Book currBook, Integer newAuthor) {
-        return !currBook.getAuthor().getId().equals(newAuthor);
+        return newAuthor != null && !currBook.getAuthor().getId().equals(newAuthor);
     }
 
     private boolean isCanSetPublicationYear(Book currBook, Integer newPublicationYear) {
@@ -100,28 +97,4 @@ public class BookServiceImpl implements BookService {
                 || newPublicationYear != null && !currBook.getPublicationYear().equals(newPublicationYear);
     }
 
-    private Specification<Book> generateBookSpec(BookRequestDto bookRequestDto) {
-        Specification<Book> spec = Specification.where(null);
-
-        String bookName = bookRequestDto.bookName();
-        Integer authorId = bookRequestDto.authorId();
-        Integer publicationYear = bookRequestDto.publicationYear();
-
-        if (bookName != null && !bookName.isEmpty()) {
-            spec = spec.and(bookSpecification.hasBookName(bookName));
-        }
-
-        if (authorId != null) {
-            spec = spec.and(bookSpecification.hasAuthor(
-                    authorRepository.findById(authorId).orElseThrow(() ->
-                            new EntityNotFoundException(
-                                    AUTHOR_NOT_FOUND_MESSAGE.formatted(authorId)))));
-        }
-
-        if (publicationYear != null) {
-            spec = spec.and(bookSpecification.hasPublicationYear(publicationYear));
-        }
-
-        return spec;
-    }
 }
