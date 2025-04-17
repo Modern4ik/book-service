@@ -1,9 +1,9 @@
 package com.books.holder.dto.author;
 
-import java.sql.Date;
+import java.time.LocalDate;
 
 public record AuthorRequestDto(String firstName,
                                String lastName,
-                               Date birthday,
+                               LocalDate birthday,
                                String country) {
 }

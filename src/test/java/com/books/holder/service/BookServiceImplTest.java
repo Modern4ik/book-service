@@ -7,19 +7,21 @@ import com.books.holder.dto.book.BookResponseDto;
 import com.books.holder.entity.Author;
 import com.books.holder.entity.Book;
 import com.books.holder.mappers.BookMapper;
+import com.books.holder.mappers.BookMapperImpl;
 import com.books.holder.repository.AuthorRepository;
 import com.books.holder.repository.BookRepository;
 import com.books.holder.specifications.BookSpecification;
+import com.books.holder.utils.AuthorTestUtils;
+import com.books.holder.utils.BookTestUtils;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,118 +33,57 @@ public class BookServiceImplTest {
     @Mock
     private AuthorRepository authorRepository;
     @Mock
-    private BookMapper bookMapper;
-    @Mock
     private BookSpecification bookSpecification;
+    @Spy
+    private BookMapper bookMapper = new BookMapperImpl();
 
     @InjectMocks
     private BookServiceImpl bookService;
 
-    private List<Book> booksDbStub;
-
-    @BeforeEach
-    public void setup() {
-        booksDbStub = generateBooksDbStub();
-    }
-
     @Test
     public void shouldSaveNewBook() {
-        BookRequestCreateDto createDto = new BookRequestCreateDto(
-                "New Book",
-                1,
-                1830
-        );
-        Author expectedAuthor = new Author(
-                1,
-                "Unknown",
-                null,
-                null,
-                null,
-                new ArrayList<>()
-        );
-        Book expectedNewBook = new Book(
-                4L,
-                createDto.bookName(),
-                new Author(1, "Unknown", null, null, null, null),
-                createDto.publicationYear()
-        );
-
+        BookRequestCreateDto createDto = BookTestUtils.generateBookCreateDto("New Book", 1, null);
+        Author expectedAuthor = AuthorTestUtils.generateAuthor(1, "Unknown", null, null, null);
 
         Mockito.when(authorRepository.findById(1)).thenReturn(Optional.of(expectedAuthor));
-        Mockito.when(bookMapper.toEntity(createDto)).thenAnswer(invocationOnMock -> {
-            booksDbStub.add(expectedNewBook);
-            return expectedNewBook;
-        });
 
         bookService.saveBook(createDto);
-        Assertions.assertEquals(4, booksDbStub.size());
-        Assertions.assertEquals(4L, booksDbStub.get(booksDbStub.size() - 1).getId());
-        Assertions.assertEquals(1, booksDbStub.get(booksDbStub.size() - 1).getAuthor().getId());
-        Assertions.assertEquals(expectedNewBook.getAuthor(), expectedAuthor);
         Assertions.assertEquals(1, expectedAuthor.getBooks().size());
-        Assertions.assertEquals(expectedNewBook, expectedAuthor.getBooks().get(0));
+        Assertions.assertEquals(createDto.bookName(), expectedAuthor.getBooks().get(0).getBookName());
     }
 
     @Test
     public void shouldReturnBookById() {
-        Book expectedBook = booksDbStub.get(1);
-        BookResponseDto expectedDto = new BookResponseDto(
-                expectedBook.getId(),
-                expectedBook.getBookName(),
-                expectedBook.getAuthor().getId(),
-                expectedBook.getPublicationYear()
-        );
-
-        Mockito.when(bookRepository.findById(2L)).thenReturn(Optional.of(expectedBook));
-        Mockito.when(bookMapper.toDto(expectedBook)).thenReturn(expectedDto);
+        Mockito.when(bookRepository.findById(2L))
+                .thenReturn(Optional.of(BookTestUtils.generateBook(2L, "Founded Book", 1, null)));
 
         BookResponseDto responseDto = bookService.getBookById(2L);
         Assertions.assertEquals(2L, responseDto.id());
-        Assertions.assertEquals("Second Book", responseDto.bookName());
+        Assertions.assertEquals("Founded Book", responseDto.bookName());
         Assertions.assertEquals(1, responseDto.authorId());
     }
 
     @Test
     public void shouldReturnBooksByNameAndAuthorId() {
-        BookRequestDto filterDto = new BookRequestDto(
-                "First Book",
-                1,
-                null
-        );
-        List<Book> expectedBooks = booksDbStub.subList(0, 1);
+        BookRequestDto filterDto = BookTestUtils.generateBookFilterDto("Filter Book", 3, null);
+        List<Book> expectedBooks = BookTestUtils.generateBooksList(filterDto, 3);
 
         Mockito.when(bookRepository.findAll(bookSpecification.generateBookSpec(filterDto)))
                 .thenReturn(expectedBooks);
-        Mockito.when(bookMapper.mapToDto(expectedBooks)).thenReturn(expectedBooks.stream()
-                .map(book -> new BookResponseDto(
-                        book.getId(),
-                        book.getBookName(),
-                        book.getAuthor().getId(),
-                        book.getPublicationYear()
-                )).toList());
 
         List<BookResponseDto> response = bookService.getBooks(filterDto);
-        Assertions.assertEquals(1, response.size());
-        Assertions.assertEquals("First Book", response.get(0).bookName());
-        Assertions.assertEquals(1, response.get(0).authorId());
+        Assertions.assertEquals(3, response.size());
+        for (Book book : expectedBooks) {
+            Assertions.assertEquals("Filter Book", book.getBookName());
+            Assertions.assertEquals(3, book.getAuthor().getId());
+        }
     }
 
     @Test
     public void shouldUpdateBookById() {
-        BookRequestUpdateDto updateDto = new BookRequestUpdateDto(
-                "Updated Book",
-                99,
-                1999
-        );
-        Author expectedNewAuthor = new Author(
-                99,
-                "New Author",
-                null,
-                null,
-                null,
-                new ArrayList<>()
-        );
-        Book expectedBookToUpdate = booksDbStub.get(0);
+        BookRequestUpdateDto updateDto = BookTestUtils.generateUpdateDto("Updated Book", 99, 1999);
+        Author expectedNewAuthor = AuthorTestUtils.generateAuthor(99, "New Author", null, null, null);
+        Book expectedBookToUpdate = BookTestUtils.generateBook(1L, "First Book", 1780, null);
 
         Mockito.when(bookRepository.findById(1L)).thenReturn(Optional.of(expectedBookToUpdate));
         Mockito.when(authorRepository.findById(99)).thenReturn(Optional.of(expectedNewAuthor));
@@ -155,49 +96,7 @@ public class BookServiceImplTest {
 
     @Test
     public void shouldDeleteBookById() {
-        Mockito.doAnswer(invocationOnMock -> {
-            booksDbStub.remove(0);
-            return null;
-        }).when(bookRepository).deleteById(1L);
-
         bookService.deleteBookById(1L);
-        Assertions.assertEquals(2, booksDbStub.size());
-        Assertions.assertEquals(2L, booksDbStub.get(0).getId());
-        Assertions.assertEquals("Second Book", booksDbStub.get(0).getBookName());
-    }
-
-    private List<Book> generateBooksDbStub() {
-        List<Book> booksStub = new ArrayList<>();
-        Author authorStub = new Author(
-                1,
-                "Unknown",
-                null,
-                null,
-                null,
-                new ArrayList<>()
-        );
-
-        booksStub.add(new Book(
-                1L,
-                "First Book",
-                authorStub,
-                2000
-        ));
-
-        booksStub.add(new Book(
-                2L,
-                "Second Book",
-                authorStub,
-                1870
-        ));
-
-        booksStub.add(new Book(
-                3L,
-                "Third Book",
-                authorStub,
-                1925
-        ));
-
-        return booksStub;
+        Mockito.verify(bookRepository).deleteById(1L);
     }
 }

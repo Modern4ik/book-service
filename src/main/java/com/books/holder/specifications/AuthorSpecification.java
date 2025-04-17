@@ -9,6 +9,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
 import java.sql.Date;
+import java.time.LocalDate;
 
 @Component
 public class AuthorSpecification {
@@ -48,7 +49,7 @@ public class AuthorSpecification {
                         lastName.toLowerCase());
     }
 
-    private Specification<Author> hasBirthday(Date birthday) {
+    private Specification<Author> hasBirthday(LocalDate birthday) {
         return (Root<Author> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) ->
                 criteriaBuilder.equal(root.get("birthday"), birthday);
     }
