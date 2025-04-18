@@ -1,0 +1,1 @@
+INSERT INTO authors (first_name, birthday) VALUES ('Unknown', NULL), ('Sergey', '1993-10-11'), ('Maxim', '1997-05-10'), ('Sergey', '1993-10-11')

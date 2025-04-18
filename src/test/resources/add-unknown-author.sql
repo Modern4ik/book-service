@@ -1,0 +1,1 @@
+INSERT INTO authors (first_name) VALUES ('Unknown')

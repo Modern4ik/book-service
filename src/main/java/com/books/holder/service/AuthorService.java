@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface AuthorService {
 
-    void saveNewAuthor(AuthorRequestCreateDto authorRequestCreateDto);
+    AuthorResponseDto saveNewAuthor(AuthorRequestCreateDto authorRequestCreateDto);
 
     AuthorResponseDto getAuthorById(Integer id);
 
