@@ -18,14 +18,15 @@ public class AuthorServiceImpl implements AuthorService {
 
     private static final int UNKNOWN_AUTHOR_ID = 1;
     private static final String AUTHOR_NOT_FOUND_MESSAGE = "Author with ID = %d not found!";
-    private static final String BASE_UNKNOWN_AUTHOR_ERROR_DELETE_MESSAGE = "Cant delete base unknown author!";
+    private static final String BASE_UNKNOWN_AUTHOR_ERROR_DELETE_MESSAGE = "Cant delete base unknown author with ID = 1!";
 
     private final AuthorRepository authorRepository;
     private final AuthorSpecification authorSpecification;
     private final AuthorMapper authorMapper;
 
-    public void saveNewAuthor(AuthorRequestCreateDto authorRequestCreateDto) {
-        authorRepository.save(authorMapper.toEntity(authorRequestCreateDto));
+    public AuthorResponseDto saveNewAuthor(AuthorRequestCreateDto authorRequestCreateDto) {
+        return authorMapper.toDto(
+                authorRepository.save(authorMapper.toEntity(authorRequestCreateDto)));
     }
 
     public AuthorResponseDto getAuthorById(Integer id) {

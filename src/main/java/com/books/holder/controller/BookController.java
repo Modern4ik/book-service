@@ -2,11 +2,13 @@ package com.books.holder.controller;
 
 import com.books.holder.dto.book.BookRequestCreateDto;
 import com.books.holder.dto.book.BookRequestDto;
-import com.books.holder.dto.book.BookResponseDto;
 import com.books.holder.dto.book.BookRequestUpdateDto;
+import com.books.holder.dto.book.BookResponseDto;
 import com.books.holder.service.BookService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,28 +21,33 @@ public class BookController {
     private final BookService bookService;
 
     @PostMapping
-    public void saveBook(@RequestBody @Valid BookRequestCreateDto bookRequestCreateDto) {
-        bookService.saveBook(bookRequestCreateDto);
+    public ResponseEntity<BookResponseDto> saveBook(@RequestBody @Valid BookRequestCreateDto bookRequestCreateDto) {
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(bookService.saveBook(bookRequestCreateDto));
     }
 
     @GetMapping(path = "/{id}")
-    public BookResponseDto getBookById(@PathVariable Long id) {
-        return bookService.getBookById(id);
+    public ResponseEntity<BookResponseDto> getBookById(@PathVariable Long id) {
+        return ResponseEntity.ok(bookService.getBookById(id));
     }
 
     @GetMapping
-    public List<BookResponseDto> getBooks(@RequestBody BookRequestDto bookRequestDto) {
-        return bookService.getBooks(bookRequestDto);
+    public ResponseEntity<List<BookResponseDto>> getBooks(@RequestBody BookRequestDto bookRequestDto) {
+        return ResponseEntity.ok(bookService.getBooks(bookRequestDto));
     }
 
     @PutMapping("/{id}")
-    public void updateBookById(@PathVariable Long id, @RequestBody BookRequestUpdateDto bookRequestUpdateDto) {
-        bookService.updateBookById(id, bookRequestUpdateDto);
+    public ResponseEntity<BookResponseDto> updateBookById(@PathVariable Long id, @RequestBody BookRequestUpdateDto bookRequestUpdateDto) {
+        return ResponseEntity.ok(bookService.updateBookById(id, bookRequestUpdateDto));
     }
 
     @DeleteMapping(path = "/{id}")
-    public void deleteBookById(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteBookById(@PathVariable Long id) {
         bookService.deleteBookById(id);
+        return ResponseEntity
+                .noContent()
+                .build();
     }
 
 }

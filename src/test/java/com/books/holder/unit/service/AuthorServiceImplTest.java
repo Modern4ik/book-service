@@ -1,12 +1,12 @@
-package com.books.holder.service;
+package com.books.holder.unit.service;
 
 import com.books.holder.dto.author.AuthorRequestCreateDto;
 import com.books.holder.dto.author.AuthorRequestDto;
 import com.books.holder.dto.author.AuthorResponseDto;
 import com.books.holder.entity.Author;
-import com.books.holder.mappers.AuthorMapper;
 import com.books.holder.mappers.AuthorMapperImpl;
 import com.books.holder.repository.AuthorRepository;
+import com.books.holder.service.AuthorServiceImpl;
 import com.books.holder.specifications.AuthorSpecification;
 import com.books.holder.utils.AuthorTestUtils;
 import org.junit.jupiter.api.Assertions;
@@ -30,7 +30,7 @@ public class AuthorServiceImplTest {
     @Mock
     private AuthorSpecification authorSpecification;
     @Spy
-    private AuthorMapper authorMapper = new AuthorMapperImpl();
+    private AuthorMapperImpl authorMapper;
 
     @InjectMocks
     private AuthorServiceImpl authorService;
@@ -39,9 +39,16 @@ public class AuthorServiceImplTest {
     public void shouldSaveNewAuthor() {
         AuthorRequestCreateDto createAuthorDto =
                 AuthorTestUtils.generateAuthorCreateDto("Sergey", null, null, null);
+        Author expectedNewAuthor =
+                AuthorTestUtils.generateAuthor(1, "Sergey", null, null, null);
 
-        authorService.saveNewAuthor(createAuthorDto);
+        Mockito.when(authorRepository.save(authorMapper.toEntity(createAuthorDto)))
+                .thenReturn(expectedNewAuthor);
+
+        AuthorResponseDto newAuthor = authorService.saveNewAuthor(createAuthorDto);
         Mockito.verify(authorRepository).save(authorMapper.toEntity(createAuthorDto));
+        Assertions.assertEquals(1, newAuthor.id());
+        Assertions.assertEquals("Sergey", newAuthor.firstName());
     }
 
     @Test
@@ -84,7 +91,7 @@ public class AuthorServiceImplTest {
         IllegalStateException deleteException = Assertions.assertThrows(IllegalStateException.class,
                 () -> authorService.deleteAuthorById(1));
 
-        Assertions.assertEquals("Cant delete base unknown author!", deleteException.getMessage());
+        Assertions.assertEquals("Cant delete base unknown author with ID = 1!", deleteException.getMessage());
     }
 
 }

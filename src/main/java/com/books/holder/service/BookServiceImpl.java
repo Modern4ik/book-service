@@ -29,14 +29,16 @@ public class BookServiceImpl implements BookService {
     private final BookMapper bookMapper;
     private final BookSpecification bookSpecification;
 
-    @Transactional
-    public void saveBook(BookRequestCreateDto bookRequestCreateDto) {
+    public BookResponseDto saveBook(BookRequestCreateDto bookRequestCreateDto) {
         int authorId = bookRequestCreateDto.authorId();
 
         Author foundedAuthor = authorRepository.findById(authorId).orElseThrow(() ->
                 new EntityNotFoundException(AUTHOR_NOT_FOUND_MESSAGE.formatted(authorId)));
 
-        foundedAuthor.addBook(bookMapper.toEntity(bookRequestCreateDto));
+        Book newBook = bookMapper.toEntity(bookRequestCreateDto);
+        foundedAuthor.addBook(newBook);
+
+        return bookMapper.toDto(bookRepository.save(newBook));
     }
 
     public BookResponseDto getBookById(Long id) {
@@ -51,18 +53,18 @@ public class BookServiceImpl implements BookService {
     }
 
     @Transactional
-    public void updateBookById(Long id, BookRequestUpdateDto bookRequestUpdateDto) {
+    public BookResponseDto updateBookById(Long id, BookRequestUpdateDto bookRequestUpdateDto) {
         Book bookWithId = bookRepository.findById(id).orElseThrow(() ->
                 new EntityNotFoundException(BOOK_NOT_FOUND_MESSAGE.formatted(id)));
 
-        updateBook(bookWithId, bookRequestUpdateDto);
+        return bookMapper.toDto(updateBook(bookWithId, bookRequestUpdateDto));
     }
 
     public void deleteBookById(Long id) {
         bookRepository.deleteById(id);
     }
 
-    private void updateBook(Book currBook, BookRequestUpdateDto bookRequestUpdateDto) {
+    private Book updateBook(Book currBook, BookRequestUpdateDto bookRequestUpdateDto) {
         String bookName = bookRequestUpdateDto.bookName();
         Integer authorId = bookRequestUpdateDto.authorId();
         Integer publicationYear = bookRequestUpdateDto.publicationYear();
@@ -81,6 +83,8 @@ public class BookServiceImpl implements BookService {
         if (isCanSetPublicationYear(currBook, publicationYear)) {
             currBook.setPublicationYear(publicationYear);
         }
+
+        return currBook;
     }
 
     private boolean isCanSetBookName(Book currentBook, String newBookName) {
