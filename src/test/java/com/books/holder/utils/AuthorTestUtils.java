@@ -1,7 +1,8 @@
 package com.books.holder.utils;
 
 import com.books.holder.dto.author.AuthorRequestCreateDto;
-import com.books.holder.dto.author.AuthorRequestDto;
+import com.books.holder.dto.author.AuthorRequestFilterDto;
+import com.books.holder.dto.author.AuthorResponseDto;
 import com.books.holder.entity.Author;
 
 import java.time.LocalDate;
@@ -15,9 +16,14 @@ public class AuthorTestUtils {
         return new AuthorRequestCreateDto(firstName, lastName, birthday, country);
     }
 
-    public static AuthorRequestDto generateAuthorFilterDto(String firstName, String lastName,
-                                                           LocalDate birthday, String country) {
-        return new AuthorRequestDto(firstName, lastName, birthday, country);
+    public static AuthorRequestFilterDto generateAuthorFilterDto(String firstName, String lastName,
+                                                                 LocalDate birthday, String country) {
+        return new AuthorRequestFilterDto(firstName, lastName, birthday, country);
+    }
+
+    public static AuthorResponseDto generateAuthorResponseDto(int id, String firstName, String lastName,
+                                                              LocalDate birthday, String country) {
+        return new AuthorResponseDto(id, firstName, lastName, birthday, country);
     }
 
     public static Author generateAuthor(Integer id, String firstName, String lastName,
@@ -25,12 +31,12 @@ public class AuthorTestUtils {
         return new Author(id, firstName, lastName, birthday, country, new ArrayList<>());
     }
 
-    public static List<Author> generateAuthorsList(AuthorRequestDto requestDto, int count) {
+    public static List<Author> generateAuthorsList(AuthorRequestFilterDto requestDto, int count) {
         List<Author> authors = new ArrayList<>();
 
         for (int i = 0; i < count; i++) {
             authors.add(generateAuthor(
-                    i,
+                    i + 1,
                     requestDto.firstName(),
                     requestDto.lastName(),
                     requestDto.birthday(),
@@ -38,6 +44,22 @@ public class AuthorTestUtils {
         }
 
         return authors;
+    }
+
+    public static List<AuthorResponseDto> generateAuthorResponseDtoList(AuthorRequestFilterDto requestDto, int count) {
+        List<AuthorResponseDto> authorResponseDtos = new ArrayList<>();
+
+        for (int i = 0; i < count; i++) {
+            authorResponseDtos.add(generateAuthorResponseDto(
+                    i + 1,
+                    requestDto.firstName(),
+                    requestDto.lastName(),
+                    requestDto.birthday(),
+                    requestDto.country()
+            ));
+        }
+
+        return authorResponseDtos;
     }
 
 }

@@ -1,6 +1,6 @@
 package com.books.holder.specifications;
 
-import com.books.holder.dto.book.BookRequestDto;
+import com.books.holder.dto.book.BookRequestFilterDto;
 import com.books.holder.entity.Author;
 import com.books.holder.entity.Book;
 import com.books.holder.repository.AuthorRepository;
@@ -20,12 +20,12 @@ public class BookSpecification {
 
     private final AuthorRepository authorRepository;
 
-    public Specification<Book> generateBookSpec(BookRequestDto bookRequestDto) {
+    public Specification<Book> generateBookSpec(BookRequestFilterDto bookRequestFilterDto) {
         Specification<Book> spec = Specification.where(null);
 
-        String bookName = bookRequestDto.bookName();
-        Integer authorId = bookRequestDto.authorId();
-        Integer publicationYear = bookRequestDto.publicationYear();
+        String bookName = bookRequestFilterDto.bookName();
+        Integer authorId = bookRequestFilterDto.authorId();
+        Integer publicationYear = bookRequestFilterDto.publicationYear();
 
         if (bookName != null && !bookName.isEmpty()) {
             spec = spec.and(hasBookName(bookName));

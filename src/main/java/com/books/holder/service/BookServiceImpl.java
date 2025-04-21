@@ -1,7 +1,7 @@
 package com.books.holder.service;
 
 import com.books.holder.dto.book.BookRequestCreateDto;
-import com.books.holder.dto.book.BookRequestDto;
+import com.books.holder.dto.book.BookRequestFilterDto;
 import com.books.holder.dto.book.BookRequestUpdateDto;
 import com.books.holder.entity.Author;
 import com.books.holder.repository.AuthorRepository;
@@ -46,9 +46,9 @@ public class BookServiceImpl implements BookService {
                 new EntityNotFoundException(BOOK_NOT_FOUND_MESSAGE.formatted(id))));
     }
 
-    public List<BookResponseDto> getBooks(BookRequestDto bookRequestDto) {
+    public List<BookResponseDto> getBooks(BookRequestFilterDto bookRequestFilterDto) {
         return bookMapper.mapToDto(bookRepository.findAll(
-                bookSpecification.generateBookSpec(bookRequestDto)
+                bookSpecification.generateBookSpec(bookRequestFilterDto)
         ));
     }
 

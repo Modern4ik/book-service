@@ -1,7 +1,7 @@
 package com.books.holder.unit.service;
 
 import com.books.holder.dto.book.BookRequestCreateDto;
-import com.books.holder.dto.book.BookRequestDto;
+import com.books.holder.dto.book.BookRequestFilterDto;
 import com.books.holder.dto.book.BookRequestUpdateDto;
 import com.books.holder.dto.book.BookResponseDto;
 import com.books.holder.entity.Author;
@@ -66,7 +66,7 @@ public class BookServiceImplTest {
 
     @Test
     public void shouldReturnBooksByNameAndAuthorId() {
-        BookRequestDto filterDto = BookTestUtils.generateBookFilterDto("Filter Book", 3, null);
+        BookRequestFilterDto filterDto = BookTestUtils.generateBookFilterDto("Filter Book", 3, null);
         List<Book> expectedBooks = BookTestUtils.generateBooksList(filterDto, 3);
 
         Mockito.when(bookRepository.findAll(bookSpecification.generateBookSpec(filterDto)))
@@ -82,7 +82,7 @@ public class BookServiceImplTest {
 
     @Test
     public void shouldUpdateBookById() {
-        BookRequestUpdateDto updateDto = BookTestUtils.generateUpdateDto("Updated Book", 99, 1999);
+        BookRequestUpdateDto updateDto = BookTestUtils.generateBookUpdateDto("Updated Book", 99, 1999);
         Author expectedNewAuthor = AuthorTestUtils.generateAuthor(99, "New Author", null, null, null);
         Book expectedBookToUpdate = BookTestUtils.generateBook(1L, "First Book", 1780, null);
 

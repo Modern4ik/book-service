@@ -1,6 +1,6 @@
 package com.books.holder.specifications;
 
-import com.books.holder.dto.author.AuthorRequestDto;
+import com.books.holder.dto.author.AuthorRequestFilterDto;
 import com.books.holder.entity.Author;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
@@ -8,29 +8,28 @@ import jakarta.persistence.criteria.Root;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
-import java.sql.Date;
 import java.time.LocalDate;
 
 @Component
 public class AuthorSpecification {
 
-    public Specification<Author> generateAuthorSpec(AuthorRequestDto authorRequestDto) {
+    public Specification<Author> generateAuthorSpec(AuthorRequestFilterDto authorRequestFilterDto) {
         Specification<Author> spec = Specification.where(null);
 
-        if (authorRequestDto.firstName() != null && !authorRequestDto.firstName().isEmpty()) {
-            spec = spec.and(hasFirstName(authorRequestDto.firstName()));
+        if (authorRequestFilterDto.firstName() != null && !authorRequestFilterDto.firstName().isEmpty()) {
+            spec = spec.and(hasFirstName(authorRequestFilterDto.firstName()));
         }
 
-        if (authorRequestDto.lastName() != null && !authorRequestDto.lastName().isEmpty()) {
-            spec = spec.and(hasLastName(authorRequestDto.lastName()));
+        if (authorRequestFilterDto.lastName() != null && !authorRequestFilterDto.lastName().isEmpty()) {
+            spec = spec.and(hasLastName(authorRequestFilterDto.lastName()));
         }
 
-        if (authorRequestDto.birthday() != null) {
-            spec = spec.and(hasBirthday(authorRequestDto.birthday()));
+        if (authorRequestFilterDto.birthday() != null) {
+            spec = spec.and(hasBirthday(authorRequestFilterDto.birthday()));
         }
 
-        if (authorRequestDto.country() != null) {
-            spec = spec.and(hasCountry(authorRequestDto.country()));
+        if (authorRequestFilterDto.country() != null) {
+            spec = spec.and(hasCountry(authorRequestFilterDto.country()));
         }
 
         return spec;

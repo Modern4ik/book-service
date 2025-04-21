@@ -1,8 +1,9 @@
 package com.books.holder.utils;
 
 import com.books.holder.dto.book.BookRequestCreateDto;
-import com.books.holder.dto.book.BookRequestDto;
+import com.books.holder.dto.book.BookRequestFilterDto;
 import com.books.holder.dto.book.BookRequestUpdateDto;
+import com.books.holder.dto.book.BookResponseDto;
 import com.books.holder.entity.Book;
 
 import java.util.ArrayList;
@@ -14,12 +15,16 @@ public class BookTestUtils {
         return new BookRequestCreateDto(bookName, authorId, publicationYear);
     }
 
-    public static BookRequestDto generateBookFilterDto(String bookName, Integer authorId, Integer publicationYear) {
-        return new BookRequestDto(bookName, authorId, publicationYear);
+    public static BookRequestFilterDto generateBookFilterDto(String bookName, Integer authorId, Integer publicationYear) {
+        return new BookRequestFilterDto(bookName, authorId, publicationYear);
     }
 
-    public static BookRequestUpdateDto generateUpdateDto(String bookName, Integer authorId, Integer publicationYear) {
+    public static BookRequestUpdateDto generateBookUpdateDto(String bookName, Integer authorId, Integer publicationYear) {
         return new BookRequestUpdateDto(bookName, authorId, publicationYear);
+    }
+
+    public static BookResponseDto generateBookResponseDto(Long id, String bookName, Integer authorId, Integer publicationYear) {
+        return new BookResponseDto(id, bookName, authorId, publicationYear);
     }
 
     public static Book generateBook(Long id, String bookName, Integer authorId, Integer publicationYear) {
@@ -29,7 +34,7 @@ public class BookTestUtils {
                 publicationYear);
     }
 
-    public static List<Book> generateBooksList(BookRequestDto requestDto, int count) {
+    public static List<Book> generateBooksList(BookRequestFilterDto requestDto, int count) {
         List<Book> books = new ArrayList<>();
 
         for (int i = 0; i < count; i++) {
@@ -37,6 +42,22 @@ public class BookTestUtils {
         }
 
         return books;
+    }
+
+    public static List<BookResponseDto> generateBookResponseDtoList(BookRequestFilterDto requestDto, int count) {
+        List<BookResponseDto> bookResponseDtos = new ArrayList<>();
+
+        for (int i = 0; i < count; i++) {
+            bookResponseDtos.add(new BookResponseDto(
+                    (long) i + 1,
+                    requestDto.bookName(),
+                    requestDto.authorId(),
+                    requestDto.publicationYear()
+
+            ));
+        }
+
+        return bookResponseDtos;
     }
 
 }

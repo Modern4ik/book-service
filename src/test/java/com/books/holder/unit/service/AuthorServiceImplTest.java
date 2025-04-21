@@ -1,7 +1,7 @@
 package com.books.holder.unit.service;
 
 import com.books.holder.dto.author.AuthorRequestCreateDto;
-import com.books.holder.dto.author.AuthorRequestDto;
+import com.books.holder.dto.author.AuthorRequestFilterDto;
 import com.books.holder.dto.author.AuthorResponseDto;
 import com.books.holder.entity.Author;
 import com.books.holder.mappers.AuthorMapperImpl;
@@ -45,7 +45,7 @@ public class AuthorServiceImplTest {
         Mockito.when(authorRepository.save(authorMapper.toEntity(createAuthorDto)))
                 .thenReturn(expectedNewAuthor);
 
-        AuthorResponseDto newAuthor = authorService.saveNewAuthor(createAuthorDto);
+        AuthorResponseDto newAuthor = authorService.saveAuthor(createAuthorDto);
         Mockito.verify(authorRepository).save(authorMapper.toEntity(createAuthorDto));
         Assertions.assertEquals(1, newAuthor.id());
         Assertions.assertEquals("Sergey", newAuthor.firstName());
@@ -65,7 +65,7 @@ public class AuthorServiceImplTest {
 
     @Test
     public void shouldReturnAuthorsBySecondNameAndBirthday() {
-        AuthorRequestDto filterDto = AuthorTestUtils.generateAuthorFilterDto(
+        AuthorRequestFilterDto filterDto = AuthorTestUtils.generateAuthorFilterDto(
                 null, "Zaytsev", LocalDate.parse("1993-11-10"), null);
         List<Author> expectedAuthors = AuthorTestUtils.generateAuthorsList(filterDto, 3);
 

@@ -1,7 +1,7 @@
 package com.books.holder.service;
 
 import com.books.holder.dto.book.BookRequestCreateDto;
-import com.books.holder.dto.book.BookRequestDto;
+import com.books.holder.dto.book.BookRequestFilterDto;
 import com.books.holder.dto.book.BookResponseDto;
 import com.books.holder.dto.book.BookRequestUpdateDto;
 
@@ -13,7 +13,7 @@ public interface BookService {
 
     BookResponseDto getBookById(Long id);
 
-    List<BookResponseDto> getBooks(BookRequestDto bookRequestDto);
+    List<BookResponseDto> getBooks(BookRequestFilterDto bookRequestFilterDto);
 
     BookResponseDto updateBookById(Long id, BookRequestUpdateDto bookRequestUpdateDto);
 
