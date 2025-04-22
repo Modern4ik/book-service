@@ -17,10 +17,10 @@ import java.util.stream.Collectors;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public CommonExceptionResponseDto handleCommonException(Exception ex) {
         return new CommonExceptionResponseDto(
-                ex.getMessage(), HttpStatus.BAD_REQUEST.value(), Instant.now().toString());
+                ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), Instant.now().toString());
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
