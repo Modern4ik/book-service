@@ -1,12 +1,13 @@
 package com.books.holder.controller;
 
 import com.books.holder.dto.book.BookRequestCreateDto;
-import com.books.holder.dto.book.BookRequestDto;
-import com.books.holder.dto.book.BookResponseDto;
+import com.books.holder.dto.book.BookRequestFilterDto;
 import com.books.holder.dto.book.BookRequestUpdateDto;
+import com.books.holder.dto.book.BookResponseDto;
 import com.books.holder.service.BookService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,8 +20,9 @@ public class BookController {
     private final BookService bookService;
 
     @PostMapping
-    public void saveBook(@RequestBody @Valid BookRequestCreateDto bookRequestCreateDto) {
-        bookService.saveBook(bookRequestCreateDto);
+    @ResponseStatus(HttpStatus.CREATED)
+    public BookResponseDto saveBook(@RequestBody @Valid BookRequestCreateDto bookRequestCreateDto) {
+        return bookService.saveBook(bookRequestCreateDto);
     }
 
     @GetMapping(path = "/{id}")
@@ -29,16 +31,17 @@ public class BookController {
     }
 
     @GetMapping
-    public List<BookResponseDto> getBooks(@RequestBody BookRequestDto bookRequestDto) {
-        return bookService.getBooks(bookRequestDto);
+    public List<BookResponseDto> getBooks(@RequestBody BookRequestFilterDto bookRequestFilterDto) {
+        return bookService.getBooks(bookRequestFilterDto);
     }
 
     @PutMapping("/{id}")
-    public void updateBookById(@PathVariable Long id, @RequestBody BookRequestUpdateDto bookRequestUpdateDto) {
-        bookService.updateBookById(id, bookRequestUpdateDto);
+    public BookResponseDto updateBookById(@PathVariable Long id, @RequestBody BookRequestUpdateDto bookRequestUpdateDto) {
+        return bookService.updateBookById(id, bookRequestUpdateDto);
     }
 
     @DeleteMapping(path = "/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteBookById(@PathVariable Long id) {
         bookService.deleteBookById(id);
     }

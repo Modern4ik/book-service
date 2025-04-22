@@ -1,0 +1,1 @@
+INSERT INTO books (book_name, author_id) VALUES ('BOOK ONE', 1), ('BOOK TWO', 1), ('BOOK ONE', 1)

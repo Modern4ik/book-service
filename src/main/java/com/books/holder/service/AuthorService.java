@@ -1,18 +1,18 @@
 package com.books.holder.service;
 
 import com.books.holder.dto.author.AuthorRequestCreateDto;
-import com.books.holder.dto.author.AuthorRequestDto;
+import com.books.holder.dto.author.AuthorRequestFilterDto;
 import com.books.holder.dto.author.AuthorResponseDto;
 
 import java.util.List;
 
 public interface AuthorService {
 
-    void saveNewAuthor(AuthorRequestCreateDto authorRequestCreateDto);
+    AuthorResponseDto saveAuthor(AuthorRequestCreateDto authorRequestCreateDto);
 
     AuthorResponseDto getAuthorById(Integer id);
 
-    List<AuthorResponseDto> getAuthors(AuthorRequestDto authorRequestDto);
+    List<AuthorResponseDto> getAuthors(AuthorRequestFilterDto authorRequestFilterDto);
 
     void deleteAuthorById(Integer id);
 

@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,7 +26,7 @@ public class Author {
     @Column(name = "last_name")
     private String lastName;
 
-    private Date birthday;
+    private LocalDate birthday;
     private String country;
 
     @OneToMany(mappedBy = "author",
@@ -37,9 +37,5 @@ public class Author {
     public void addBook(Book book) {
         book.setAuthor(this);
         books.add(book);
-    }
-
-    public void removeBook(Book book) {
-        books.remove(book);
     }
 }
