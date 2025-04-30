@@ -24,13 +24,14 @@ import java.util.List;
 @Transactional
 @Sql(scripts = "/add-unknown-author.sql")
 @Sql(scripts = "/test-books-data.sql")
+@Sql(scripts = "/test-genres-data.sql")
 public class BookIntegrationTest {
 
     @Autowired
-    private BookController bookController;
-    @Autowired
     private EntityManager entityManager;
 
+    @Autowired
+    private BookController bookController;
     @Autowired
     private BookRepository bookRepository;
 
@@ -43,25 +44,33 @@ public class BookIntegrationTest {
         entityManager.createNativeQuery(
                 "ALTER TABLE authors ALTER COLUMN id RESTART WITH 1"
         ).executeUpdate();
+
+        entityManager.createNativeQuery(
+                "ALTER TABLE genres ALTER COLUMN id RESTART WITH 1"
+        ).executeUpdate();
     }
 
     @Test
-    public void shouldSaveBook() throws Exception {
+    public void shouldSaveBook() {
         BookRequestCreateDto createDto =
-                BookTestUtils.generateBookCreateDto("New book", 1, 2000);
+                BookTestUtils.generateBookCreateDto("Test book", 1, List.of(1, 2), 2000);
 
         BookResponseDto bookResponse = bookController.saveBook(createDto);
 
         Assertions.assertNotNull(bookResponse);
         Assertions.assertEquals(4L, bookResponse.id());
-        Assertions.assertEquals("New book", bookResponse.bookName());
-        Assertions.assertEquals(1, bookResponse.authorId());
-        Assertions.assertEquals(2000, bookResponse.publicationYear());
+        Assertions.assertEquals(createDto.bookName(), bookResponse.bookName());
+        Assertions.assertEquals(createDto.authorId(), bookResponse.authorId());
+        Assertions.assertEquals(createDto.genresId().size(), bookResponse.genreNames().size());
+        Assertions.assertTrue(bookResponse.genreNames().contains("Drama"));
+        Assertions.assertTrue(bookResponse.genreNames().contains("Fantasy"));
+        Assertions.assertEquals(createDto.publicationYear(), bookResponse.publicationYear());
+
         Assertions.assertEquals(4, bookRepository.count());
     }
 
     @Test
-    public void shouldReturnBookById() throws Exception {
+    public void shouldReturnBookById() {
         BookResponseDto bookResponse = bookController.getBookById(1L);
 
         Assertions.assertEquals(1, bookResponse.id());
@@ -69,9 +78,9 @@ public class BookIntegrationTest {
     }
 
     @Test
-    public void shouldReturnBooksByNameAndAuthor() throws Exception {
+    public void shouldReturnBooksByNameAndAuthor() {
         BookRequestFilterDto filterDto =
-                BookTestUtils.generateBookFilterDto("BOOK ONE", 1, null);
+                BookTestUtils.generateBookFilterDto("BOOK ONE", 1, null, null);
 
         List<BookResponseDto> booksResponse = bookController.getBooks(filterDto);
 
@@ -81,20 +90,23 @@ public class BookIntegrationTest {
     }
 
     @Test
-    public void shouldUpdateBookById() throws Exception {
+    public void shouldUpdateBookById() {
         BookRequestUpdateDto updateDto =
-                BookTestUtils.generateBookUpdateDto("UPDATED BOOK", null, 2000);
+                BookTestUtils.generateBookUpdateDto("UPDATED BOOK", null, List.of(1, 2), 2000);
 
         BookResponseDto bookResponse = bookController.updateBookById(1L, updateDto);
 
         Assertions.assertNotNull(bookResponse);
         Assertions.assertEquals("UPDATED BOOK", bookResponse.bookName());
+        Assertions.assertEquals(updateDto.genresId().size(), bookResponse.genreNames().size());
+        Assertions.assertTrue(bookResponse.genreNames().contains("Drama"));
+        Assertions.assertTrue(bookResponse.genreNames().contains("Fantasy"));
         Assertions.assertEquals(2000, bookResponse.publicationYear());
 
     }
 
     @Test
-    public void shouldDeleteBookById() throws Exception {
+    public void shouldDeleteBookById() {
         bookController.deleteBookById(1L);
 
         Assertions.assertFalse(bookRepository.existsById(1L));

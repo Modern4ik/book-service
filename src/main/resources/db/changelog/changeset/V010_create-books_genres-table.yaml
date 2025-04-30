@@ -1,0 +1,24 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-books_genres-table
+      author: Sergey Zaytsev
+      changes:
+        - createTable:
+            tableName: books_genres
+            columns:
+              - column:
+                  name: book_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_books-genres_books
+                    references: books(id)
+                    primaryKey: true
+              - column:
+                  name: genre_id
+                  type: INT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_books-genres_genres
+                    references: genres(id)
+                    primaryKey: true

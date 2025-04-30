@@ -1,0 +1,1 @@
+INSERT INTO users (nickname, first_name, email, registration_date) VALUES ('ONE', 'Serg', 'one@mail.ru', '2020-03-05'), ('TWO', 'Igor', 'two@mail.ru', '2020-03-05'), ('THREE', 'Serg', 'three@mail.ru', '2020-03-05')

@@ -1,13 +1,15 @@
-package com.books.holder.service;
+package com.books.holder.service.book;
 
 import com.books.holder.dto.book.BookRequestCreateDto;
 import com.books.holder.dto.book.BookRequestFilterDto;
-import com.books.holder.dto.book.BookResponseDto;
 import com.books.holder.dto.book.BookRequestUpdateDto;
+import com.books.holder.dto.book.BookResponseDto;
 
 import java.util.List;
 
 public interface BookService {
+
+    String CACHE_NAMESPACE = "books";
 
     BookResponseDto saveBook(BookRequestCreateDto bookRequestCreateDto);
 

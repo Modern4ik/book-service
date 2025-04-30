@@ -1,8 +1,8 @@
 package com.books.holder.integration.full;
 
 import com.books.holder.controller.AuthorController;
-import com.books.holder.dto.author.AuthorRequestFilterDto;
 import com.books.holder.dto.author.AuthorRequestCreateDto;
+import com.books.holder.dto.author.AuthorRequestFilterDto;
 import com.books.holder.dto.author.AuthorResponseDto;
 import com.books.holder.repository.AuthorRepository;
 import com.books.holder.utils.AuthorTestUtils;
@@ -73,8 +73,10 @@ public class AuthorIntegrationTest {
 
         Assertions.assertNotNull(authorsResponse);
         Assertions.assertEquals(2, authorsResponse.size());
-        Assertions.assertEquals("Sergey", authorsResponse.get(0).firstName());
-        Assertions.assertEquals("1993-10-11", authorsResponse.get(0).birthday().toString());
+        for (AuthorResponseDto authorResponseDto : authorsResponse) {
+            Assertions.assertEquals(filterDto.firstName(), authorResponseDto.firstName());
+            Assertions.assertEquals(filterDto.birthday(), authorResponseDto.birthday());
+        }
     }
 
     @Test

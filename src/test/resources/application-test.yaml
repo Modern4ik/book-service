@@ -17,3 +17,6 @@ spring:
 
   liquibase:
     enabled: false
+
+  cache:
+    type: none
