@@ -7,7 +7,6 @@ import com.books.holder.dto.user.UserResponseDto;
 import com.books.holder.mappers.UserMapper;
 import com.books.holder.repository.UserRepository;
 import com.books.holder.service.cache.CacheVersionService;
-import com.books.holder.specifications.UserSpecification;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -21,8 +20,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
+    private static final String CACHE_NAMESPACE = "users";
+
     private final UserRepository userRepository;
-    private final UserSpecification userSpecification;
     private final UserMapper userMapper;
     private final CacheVersionService cacheVersionService;
 
@@ -47,11 +47,12 @@ public class UserServiceImpl implements UserService {
     @Cacheable(value = "usersByFilter", key = "{#userRequestFilterDto, @cacheVersionService.getCurrentVersion('users')}")
     public List<UserResponseDto> getUsers(UserRequestFilterDto userRequestFilterDto) {
         return userMapper.mapToDto(
-                userRepository.findAll(userSpecification.generateUserSpecification(userRequestFilterDto)));
+                userRepository.findByFilters(
+                        userRequestFilterDto.firstName(), userRequestFilterDto.lastName(), userRequestFilterDto.createdAt())
+        );
     }
 
     @Override
-    @Transactional
     @CacheEvict(value = "userById", key = "#id")
     public void deleteUserById(Long id) {
         userRepository.deleteById(id);
@@ -60,13 +61,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
     public boolean nicknameExists(String nickname) {
         return userRepository.existsByNickname(nickname);
     }
 
     @Override
-    @Transactional
     public boolean emailExists(String email) {
         return userRepository.existsByEmail(email);
     }

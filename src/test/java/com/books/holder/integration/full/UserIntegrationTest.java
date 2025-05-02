@@ -16,7 +16,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @SpringBootTest
@@ -44,15 +43,15 @@ public class UserIntegrationTest {
     public void shouldSaveUser() {
         UserRequestCreateDto createDto =
                 UserTestUtils.generateUserCreateDto(
-                        "Nickname", null, null, "test@mail.ru", LocalDate.of(2022, 4, 5));
+                        "Nickname", null, null, "test@mail.ru");
 
         UserResponseDto responseDto = userController.saveUser(createDto);
 
         Assertions.assertNotNull(responseDto);
-        Assertions.assertEquals(4L, responseDto.id());
-        Assertions.assertEquals(createDto.nickname(), responseDto.nickname());
-        Assertions.assertEquals(createDto.email(), responseDto.email());
-        Assertions.assertEquals(createDto.registrationDate(), responseDto.registrationDate());
+        Assertions.assertEquals(4L, responseDto.getId());
+        Assertions.assertEquals(createDto.nickname(), responseDto.getNickname());
+        Assertions.assertEquals(createDto.email(), responseDto.getEmail());
+        Assertions.assertNotNull(responseDto.getCreatedAt());
 
         Assertions.assertEquals(4, userRepository.count());
     }
@@ -62,22 +61,22 @@ public class UserIntegrationTest {
         UserResponseDto responseDto = userController.getUserById(2L);
 
         Assertions.assertNotNull(responseDto);
-        Assertions.assertEquals(2L, responseDto.id());
-        Assertions.assertEquals("TWO", responseDto.nickname());
+        Assertions.assertEquals(2L, responseDto.getId());
+        Assertions.assertEquals("TWO", responseDto.getNickname());
     }
 
     @Test
-    public void shouldReturnUsersByFirstNameAndRegistrationDate() {
+    public void shouldReturnUsersByFirstNameAndLastName() {
         UserRequestFilterDto filterDto =
-                UserTestUtils.generateUserFilterDto("Serg", null, LocalDate.of(2020, 3, 5));
+                UserTestUtils.generateUserFilterDto("Serg", "Zayts", null);
 
         List<UserResponseDto> responseDtoList = userController.getUsers(filterDto);
 
         Assertions.assertNotNull(responseDtoList);
         Assertions.assertEquals(2, responseDtoList.size());
         for (UserResponseDto responseDto : responseDtoList) {
-            Assertions.assertEquals(filterDto.firstName(), responseDto.firstName());
-            Assertions.assertEquals(filterDto.registrationDate(), responseDto.registrationDate());
+            Assertions.assertEquals(filterDto.firstName(), responseDto.getFirstName());
+            Assertions.assertEquals(filterDto.lastName(), responseDto.getLastName());
         }
     }
 

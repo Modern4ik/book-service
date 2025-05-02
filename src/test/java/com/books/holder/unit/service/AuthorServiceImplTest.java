@@ -51,8 +51,8 @@ public class AuthorServiceImplTest {
 
         AuthorResponseDto newAuthor = authorService.saveAuthor(createAuthorDto);
         Mockito.verify(authorRepository).save(authorMapper.toEntity(createAuthorDto));
-        Assertions.assertEquals(expectedNewAuthor.getId(), newAuthor.id());
-        Assertions.assertEquals(expectedNewAuthor.getFirstName(), newAuthor.firstName());
+        Assertions.assertEquals(expectedNewAuthor.getId(), newAuthor.getId());
+        Assertions.assertEquals(expectedNewAuthor.getFirstName(), newAuthor.getFirstName());
     }
 
     @Test
@@ -65,8 +65,8 @@ public class AuthorServiceImplTest {
 
         AuthorResponseDto responseWithAuthor = authorService.getAuthorById(1);
         Assertions.assertNotNull(responseWithAuthor);
-        Assertions.assertEquals(1, responseWithAuthor.id());
-        Assertions.assertEquals("Unknown", responseWithAuthor.firstName());
+        Assertions.assertEquals(1, responseWithAuthor.getId());
+        Assertions.assertEquals("Unknown", responseWithAuthor.getFirstName());
     }
 
     @Test
@@ -81,8 +81,8 @@ public class AuthorServiceImplTest {
         List<AuthorResponseDto> responseWithAuthors = authorService.getAuthors(filterDto);
         Assertions.assertEquals(3, responseWithAuthors.size());
         for (AuthorResponseDto responseDto : responseWithAuthors) {
-            Assertions.assertEquals("Zaytsev", responseDto.lastName());
-            Assertions.assertEquals("1993-11-10", responseDto.birthday().toString());
+            Assertions.assertEquals("Zaytsev", responseDto.getLastName());
+            Assertions.assertEquals("1993-11-10", responseDto.getBirthday().toString());
         }
     }
 

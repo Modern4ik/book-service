@@ -19,7 +19,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @WebMvcTest(UserController.class)
 @ActiveProfiles("test")
@@ -37,10 +37,10 @@ public class UserControllerTest {
     public void shouldSaveNewUser() throws Exception {
         UserRequestCreateDto createDto =
                 UserTestUtils.generateUserCreateDto(
-                        "Test user", "Serg", "Zayts", "test@mail.ru", LocalDate.of(2022, 5, 4));
+                        "Test user", "Serg", "Zayts", "test@mail.ru");
         UserResponseDto expectedResponseDto =
                 UserTestUtils.generateUserResponseDto(
-                        1L, createDto.nickname(), createDto.firstName(), createDto.lastName(), createDto.email(), createDto.registrationDate());
+                        1L, createDto.nickname(), createDto.firstName(), createDto.lastName(), createDto.email(), LocalDateTime.now());
 
         Mockito.when(userService.saveUser(createDto))
                 .thenReturn(expectedResponseDto);
@@ -59,7 +59,7 @@ public class UserControllerTest {
     public void shouldReturnUserById() throws Exception {
         UserResponseDto expectedResponseDto =
                 UserTestUtils.generateUserResponseDto(
-                        1L, "nickname", "Serg", "Zayts", "test@mail.ru", LocalDate.of(2022, 5, 4));
+                        1L, "nickname", "Serg", "Zayts", "test@mail.ru", LocalDateTime.now());
 
         Mockito.when(userService.getUserById(1L))
                 .thenReturn(expectedResponseDto);
@@ -72,9 +72,9 @@ public class UserControllerTest {
     }
 
     @Test
-    public void shouldReturnUsersByFirstNameAndRegistrationDate() throws Exception {
+    public void shouldReturnUsersByFirstNameAndLastName() throws Exception {
         UserRequestFilterDto filterDto =
-                UserTestUtils.generateUserFilterDto("Serg", null, LocalDate.of(2015, 3, 1));
+                UserTestUtils.generateUserFilterDto("Serg", "Zayts", LocalDateTime.now());
 
         Mockito.when(userService.getUsers(filterDto))
                 .thenReturn(UserTestUtils.generateUserDtosList(filterDto, 3));
@@ -85,7 +85,7 @@ public class UserControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$", Matchers.hasSize(3)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].firstName").value(filterDto.firstName()))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0].registrationDate").value(filterDto.registrationDate().toString()));
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].lastName").value(filterDto.lastName()));
     }
 
     @Test

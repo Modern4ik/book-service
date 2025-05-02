@@ -77,11 +77,11 @@ public class BookServiceImplTest {
                 .thenReturn(Optional.of(BookTestUtils.generateBook(2L, "Founded Book", 1, genres, null)));
 
         BookResponseDto responseDto = bookService.getBookById(2L);
-        Assertions.assertEquals(2L, responseDto.id());
-        Assertions.assertEquals("Founded Book", responseDto.bookName());
-        Assertions.assertEquals(1, responseDto.authorId());
-        Assertions.assertEquals(genres.size(), responseDto.genreNames().size());
-        Assertions.assertTrue(responseDto.genreNames().contains(genres.get(0).getName()));
+        Assertions.assertEquals(2L, responseDto.getId());
+        Assertions.assertEquals("Founded Book", responseDto.getBookName());
+        Assertions.assertEquals(1, responseDto.getAuthorId());
+        Assertions.assertEquals(genres.size(), responseDto.getGenreNames().size());
+        Assertions.assertTrue(responseDto.getGenreNames().contains(genres.get(0).getName()));
     }
 
     @Test

@@ -58,13 +58,13 @@ public class BookIntegrationTest {
         BookResponseDto bookResponse = bookController.saveBook(createDto);
 
         Assertions.assertNotNull(bookResponse);
-        Assertions.assertEquals(4L, bookResponse.id());
-        Assertions.assertEquals(createDto.bookName(), bookResponse.bookName());
-        Assertions.assertEquals(createDto.authorId(), bookResponse.authorId());
-        Assertions.assertEquals(createDto.genresId().size(), bookResponse.genreNames().size());
-        Assertions.assertTrue(bookResponse.genreNames().contains("Drama"));
-        Assertions.assertTrue(bookResponse.genreNames().contains("Fantasy"));
-        Assertions.assertEquals(createDto.publicationYear(), bookResponse.publicationYear());
+        Assertions.assertEquals(4L, bookResponse.getId());
+        Assertions.assertEquals(createDto.bookName(), bookResponse.getBookName());
+        Assertions.assertEquals(createDto.authorId(), bookResponse.getAuthorId());
+        Assertions.assertEquals(createDto.genresId().size(), bookResponse.getGenreNames().size());
+        Assertions.assertTrue(bookResponse.getGenreNames().contains("Drama"));
+        Assertions.assertTrue(bookResponse.getGenreNames().contains("Fantasy"));
+        Assertions.assertEquals(createDto.publicationYear(), bookResponse.getPublicationYear());
 
         Assertions.assertEquals(4, bookRepository.count());
     }
@@ -73,8 +73,8 @@ public class BookIntegrationTest {
     public void shouldReturnBookById() {
         BookResponseDto bookResponse = bookController.getBookById(1L);
 
-        Assertions.assertEquals(1, bookResponse.id());
-        Assertions.assertEquals("BOOK ONE", bookResponse.bookName());
+        Assertions.assertEquals(1, bookResponse.getId());
+        Assertions.assertEquals("BOOK ONE", bookResponse.getBookName());
     }
 
     @Test
@@ -85,8 +85,8 @@ public class BookIntegrationTest {
         List<BookResponseDto> booksResponse = bookController.getBooks(filterDto);
 
         Assertions.assertEquals(2, booksResponse.size());
-        Assertions.assertEquals("BOOK ONE", booksResponse.get(0).bookName());
-        Assertions.assertEquals(1, booksResponse.get(0).authorId());
+        Assertions.assertEquals("BOOK ONE", booksResponse.get(0).getBookName());
+        Assertions.assertEquals(1, booksResponse.get(0).getAuthorId());
     }
 
     @Test
@@ -97,11 +97,11 @@ public class BookIntegrationTest {
         BookResponseDto bookResponse = bookController.updateBookById(1L, updateDto);
 
         Assertions.assertNotNull(bookResponse);
-        Assertions.assertEquals("UPDATED BOOK", bookResponse.bookName());
-        Assertions.assertEquals(updateDto.genresId().size(), bookResponse.genreNames().size());
-        Assertions.assertTrue(bookResponse.genreNames().contains("Drama"));
-        Assertions.assertTrue(bookResponse.genreNames().contains("Fantasy"));
-        Assertions.assertEquals(2000, bookResponse.publicationYear());
+        Assertions.assertEquals("UPDATED BOOK", bookResponse.getBookName());
+        Assertions.assertEquals(updateDto.genresId().size(), bookResponse.getGenreNames().size());
+        Assertions.assertTrue(bookResponse.getGenreNames().contains("Drama"));
+        Assertions.assertTrue(bookResponse.getGenreNames().contains("Fantasy"));
+        Assertions.assertEquals(2000, bookResponse.getPublicationYear());
 
     }
 

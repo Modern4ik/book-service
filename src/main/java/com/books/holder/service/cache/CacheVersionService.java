@@ -1,5 +1,6 @@
 package com.books.holder.service.cache;
 
+import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +22,11 @@ public class CacheVersionService {
     }
 
     @Scheduled(fixedRate = 86_400_000)
+    @SchedulerLock(
+            name = "resetDailyCounters",
+            lockAtLeastFor = "30s",
+            lockAtMostFor = "1m"
+    )
     public void resetDailyCounters() {
         versions.replaceAll((k, v) -> new AtomicLong());
     }

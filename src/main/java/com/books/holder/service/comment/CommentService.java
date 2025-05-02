@@ -8,8 +8,6 @@ import java.util.List;
 
 public interface CommentService {
 
-    String CACHE_NAMESPACE = "comments";
-
     CommentResponseDto saveComment(CommentRequestCreateDto commentRequestCreateDto);
 
     CommentResponseDto getCommentById(Long id);

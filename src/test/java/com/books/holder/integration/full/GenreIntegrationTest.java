@@ -45,8 +45,8 @@ public class GenreIntegrationTest {
         GenreResponseDto responseDto = genreController.saveGenre(createDto);
 
         Assertions.assertNotNull(responseDto);
-        Assertions.assertEquals(4, responseDto.id());
-        Assertions.assertEquals(createDto.name(), responseDto.name());
+        Assertions.assertEquals(4, responseDto.getId());
+        Assertions.assertEquals(createDto.name(), responseDto.getName());
 
         Assertions.assertEquals(4, genreRepository.count());
     }
@@ -56,8 +56,8 @@ public class GenreIntegrationTest {
         GenreResponseDto responseDto = genreController.getGenreById(1);
 
         Assertions.assertNotNull(responseDto);
-        Assertions.assertEquals(1, responseDto.id());
-        Assertions.assertEquals("Drama", responseDto.name());
+        Assertions.assertEquals(1, responseDto.getId());
+        Assertions.assertEquals("Drama", responseDto.getName());
     }
 
     @Test
@@ -65,8 +65,8 @@ public class GenreIntegrationTest {
         GenreResponseDto responseDto = genreController.getGenreByName("Fantasy");
 
         Assertions.assertNotNull(responseDto);
-        Assertions.assertEquals(2, responseDto.id());
-        Assertions.assertEquals("Fantasy", responseDto.name());
+        Assertions.assertEquals(2, responseDto.getId());
+        Assertions.assertEquals("Fantasy", responseDto.getName());
     }
 
     @Test
@@ -75,8 +75,8 @@ public class GenreIntegrationTest {
 
         Assertions.assertNotNull(responseDtoList);
         Assertions.assertEquals(3, responseDtoList.size());
-        Assertions.assertEquals(3, responseDtoList.get(responseDtoList.size() - 1).id());
-        Assertions.assertEquals("Horror", responseDtoList.get(responseDtoList.size() - 1).name());
+        Assertions.assertEquals(3, responseDtoList.get(responseDtoList.size() - 1).getId());
+        Assertions.assertEquals("Horror", responseDtoList.get(responseDtoList.size() - 1).getName());
     }
 
     @Test
@@ -84,8 +84,8 @@ public class GenreIntegrationTest {
         GenreResponseDto responseDto = genreController.updateGenreNameById(1, "Action");
 
         Assertions.assertNotNull(responseDto);
-        Assertions.assertEquals(1, responseDto.id());
-        Assertions.assertEquals("Action", responseDto.name());
+        Assertions.assertEquals(1, responseDto.getId());
+        Assertions.assertEquals("Action", responseDto.getName());
     }
 
     @Test

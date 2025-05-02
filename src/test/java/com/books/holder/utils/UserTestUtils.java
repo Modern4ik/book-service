@@ -5,29 +5,29 @@ import com.books.holder.dto.user.UserRequestFilterDto;
 import com.books.holder.dto.user.UserResponseDto;
 import com.books.holder.entity.User;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 public class UserTestUtils {
 
     public static UserRequestCreateDto generateUserCreateDto(String nickname, String firstName, String lastName,
-                                                             String email, LocalDate registrationDate) {
-        return new UserRequestCreateDto(nickname, firstName, lastName, email, registrationDate);
+                                                             String email) {
+        return new UserRequestCreateDto(nickname, firstName, lastName, email);
     }
 
-    public static UserRequestFilterDto generateUserFilterDto(String firstName, String lastName, LocalDate registrationDate) {
-        return new UserRequestFilterDto(firstName, lastName, registrationDate);
+    public static UserRequestFilterDto generateUserFilterDto(String firstName, String lastName, LocalDateTime createdAt) {
+        return new UserRequestFilterDto(firstName, lastName, createdAt);
     }
 
     public static UserResponseDto generateUserResponseDto(Long id, String nickname, String firstName, String lastName,
-                                                          String email, LocalDate registrationDate) {
-        return new UserResponseDto(id, nickname, firstName, lastName, email, registrationDate);
+                                                          String email, LocalDateTime createdAt) {
+        return new UserResponseDto(id, nickname, firstName, lastName, email, createdAt);
     }
 
     public static User generateUser(Long id, String nickname, String firstName,
-                                    String lastName, String email, LocalDate registrationDate) {
-        return new User(id, nickname, firstName, lastName, email, registrationDate, new ArrayList<>());
+                                    String lastName, String email, LocalDateTime createdAt) {
+        return new User(id, nickname, firstName, lastName, email, createdAt, new ArrayList<>());
     }
 
     public static List<User> generateUsersList(UserRequestFilterDto filterDto, int count) {
@@ -40,7 +40,7 @@ public class UserTestUtils {
                     filterDto.firstName(),
                     filterDto.lastName(),
                     null,
-                    filterDto.registrationDate()
+                    filterDto.createdAt()
             ));
         }
 
@@ -57,7 +57,7 @@ public class UserTestUtils {
                     filterDto.firstName(),
                     filterDto.lastName(),
                     "test@mail.ru",
-                    filterDto.registrationDate()
+                    filterDto.createdAt()
             ));
         }
 

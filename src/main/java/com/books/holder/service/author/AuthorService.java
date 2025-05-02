@@ -8,8 +8,6 @@ import java.util.List;
 
 public interface AuthorService {
 
-    String CACHE_NAMESPACE = "authors";
-
     AuthorResponseDto saveAuthor(AuthorRequestCreateDto authorRequestCreateDto);
 
     AuthorResponseDto getAuthorById(Integer id);

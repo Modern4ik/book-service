@@ -15,7 +15,7 @@ public interface CommentMapper {
     @Mapping(target = "userId", source = "user.id")
     CommentResponseDto toDto(Comment comment);
 
-    @Mapping(target = "postDate", expression = "java(LocalDateTime.now())")
+    @Mapping(target = "createdAt", expression = "java(java.time.LocalDateTime.now())")
     Comment toEntity(CommentRequestCreateDto commentRequestCreateDto);
 
     List<CommentResponseDto> mapToDto(List<Comment> comments);

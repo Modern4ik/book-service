@@ -19,9 +19,7 @@ spring:
     host: localhost
     port: 6379
     password:
+    cache-ttl: 10m
 
   cache:
     type: redis
-    redis:
-      time-to-live: 10m
-      cache-null-values: false

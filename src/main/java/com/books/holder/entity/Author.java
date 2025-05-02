@@ -35,7 +35,9 @@ public class Author {
     private List<Book> books = new ArrayList<>();
 
     public void addBook(Book book) {
-        book.setAuthor(this);
-        books.add(book);
+        if (book != null) {
+            book.setAuthor(this);
+            books.add(book);
+        }
     }
 }

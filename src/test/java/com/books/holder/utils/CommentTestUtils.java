@@ -5,7 +5,6 @@ import com.books.holder.dto.comment.CommentRequestFilterDto;
 import com.books.holder.dto.comment.CommentResponseDto;
 import com.books.holder.entity.Comment;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,15 +15,15 @@ public class CommentTestUtils {
         return new CommentRequestCreateDto(content, bookId, userId);
     }
 
-    public static CommentRequestFilterDto generateFilterDto(long bookId, long userId, LocalDateTime postDate) {
-        return new CommentRequestFilterDto(bookId, userId, postDate);
+    public static CommentRequestFilterDto generateFilterDto(long bookId, long userId, LocalDateTime createdAt) {
+        return new CommentRequestFilterDto(bookId, userId, createdAt);
     }
 
-    public static CommentResponseDto generateResponseDto(Long id, String content, long bookId, long userId, LocalDateTime postDate) {
-        return new CommentResponseDto(id, content, bookId, userId, postDate);
+    public static CommentResponseDto generateResponseDto(Long id, String content, long bookId, long userId, LocalDateTime createdAt) {
+        return new CommentResponseDto(id, content, bookId, userId, createdAt);
     }
 
-    public static Comment generateComment(long id, String content, long bookId, long userId, LocalDateTime postDate) {
+    public static Comment generateComment(long id, String content, long bookId, long userId, LocalDateTime createdAt) {
         return new Comment(id,
                 content,
                 BookTestUtils.generateBook(bookId, "Test book", 1, null, null),
@@ -34,8 +33,8 @@ public class CommentTestUtils {
                         "Serg",
                         "Zayts",
                         "Test@mail.ru",
-                        LocalDate.of(2022, 3, 5)),
-                postDate);
+                        LocalDateTime.now()),
+                createdAt);
     }
 
     public static List<Comment> generateCommentsList(CommentRequestFilterDto filterDto, int count) {
@@ -47,7 +46,7 @@ public class CommentTestUtils {
                     "Test comment",
                     filterDto.bookId(),
                     filterDto.userId(),
-                    filterDto.postDate()
+                    filterDto.createdAt()
             ));
         }
 
@@ -63,7 +62,7 @@ public class CommentTestUtils {
                     "Test comment",
                     filterDto.bookId(),
                     filterDto.userId(),
-                    filterDto.postDate()
+                    filterDto.createdAt()
             ));
         }
 

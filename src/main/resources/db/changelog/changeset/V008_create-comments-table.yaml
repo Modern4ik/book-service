@@ -31,7 +31,7 @@ databaseChangeLog:
                     foreignKeyName: fk_comments_users
                     references: users(id)
               - column:
-                  name: post_date
+                  name: created_at
                   type: TIMESTAMP
                   constraints:
                     nullable: false

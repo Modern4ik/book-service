@@ -22,6 +22,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class GenreServiceImpl implements GenreService {
 
+    private static final String CACHE_NAMESPACE = "genres";
+
     private final GenreRepository genreRepository;
     private final GenreMapper genreMapper;
     private final CacheVersionService cacheVersionService;
@@ -75,7 +77,6 @@ public class GenreServiceImpl implements GenreService {
     }
 
     @Override
-    @Transactional
     public void deleteGenreById(Integer id) {
         String genreName = genreRepository.findById(id)
                 .map(Genre::getName)
@@ -89,7 +90,6 @@ public class GenreServiceImpl implements GenreService {
     }
 
     @Override
-    @Transactional
     public boolean genreExists(String genreName) {
         return genreRepository.existsByName(genreName);
     }

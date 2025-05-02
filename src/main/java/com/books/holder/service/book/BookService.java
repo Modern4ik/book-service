@@ -9,8 +9,6 @@ import java.util.List;
 
 public interface BookService {
 
-    String CACHE_NAMESPACE = "books";
-
     BookResponseDto saveBook(BookRequestCreateDto bookRequestCreateDto);
 
     BookResponseDto getBookById(Long id);

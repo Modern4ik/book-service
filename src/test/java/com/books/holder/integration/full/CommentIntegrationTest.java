@@ -62,10 +62,11 @@ public class CommentIntegrationTest {
         CommentResponseDto responseDto = commentController.saveComment(createDto);
 
         Assertions.assertNotNull(responseDto);
-        Assertions.assertEquals(4L, responseDto.id());
-        Assertions.assertEquals(createDto.content(), responseDto.content());
-        Assertions.assertEquals(createDto.bookId(), responseDto.bookId());
-        Assertions.assertEquals(createDto.userId(), responseDto.userId());
+        Assertions.assertEquals(4L, responseDto.getId());
+        Assertions.assertEquals(createDto.content(), responseDto.getContent());
+        Assertions.assertEquals(createDto.bookId(), responseDto.getBookId());
+        Assertions.assertEquals(createDto.userId(), responseDto.getUserId());
+        Assertions.assertNotNull(responseDto.getCreatedAt());
 
         Assertions.assertEquals(4, commentRepository.count());
     }
@@ -75,8 +76,8 @@ public class CommentIntegrationTest {
         CommentResponseDto responseDto = commentController.getCommentById(1L);
 
         Assertions.assertNotNull(responseDto);
-        Assertions.assertEquals(1L, responseDto.id());
-        Assertions.assertEquals("First comment", responseDto.content());
+        Assertions.assertEquals(1L, responseDto.getId());
+        Assertions.assertEquals("First comment", responseDto.getContent());
     }
 
     @Test
@@ -89,8 +90,8 @@ public class CommentIntegrationTest {
         Assertions.assertNotNull(responseDtoList);
         Assertions.assertEquals(2, responseDtoList.size());
         for (CommentResponseDto responseDto : responseDtoList) {
-            Assertions.assertEquals(filterDto.bookId(), responseDto.bookId());
-            Assertions.assertEquals(filterDto.userId(), responseDto.userId());
+            Assertions.assertEquals(filterDto.bookId(), responseDto.getBookId());
+            Assertions.assertEquals(filterDto.userId(), responseDto.getUserId());
         }
     }
 

@@ -12,7 +12,6 @@ import com.books.holder.repository.BookRepository;
 import com.books.holder.repository.CommentRepository;
 import com.books.holder.repository.UserRepository;
 import com.books.holder.service.cache.CacheVersionService;
-import com.books.holder.specifications.CommentSpecification;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -26,11 +25,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CommentServiceImpl implements CommentService {
 
+    private static final String CACHE_NAMESPACE = "comments";
+
     private final CommentRepository commentRepository;
     private final BookRepository bookRepository;
     private final UserRepository userRepository;
 
-    private final CommentSpecification commentSpecification;
     private final CommentMapper commentMapper;
     private final CacheVersionService cacheVersionService;
 
@@ -65,12 +65,11 @@ public class CommentServiceImpl implements CommentService {
     @Override
     @Cacheable(value = "commentsByFilter", key = "{#commentRequestFilterDto, @cacheVersionService.getCurrentVersion('comments')}")
     public List<CommentResponseDto> getComments(CommentRequestFilterDto commentRequestFilterDto) {
-        return commentMapper.mapToDto(
-                commentRepository.findAll(commentSpecification.generateCommentSpec(commentRequestFilterDto)));
+        return commentMapper.mapToDto(commentRepository.findByFilters(
+                commentRequestFilterDto.bookId(), commentRequestFilterDto.userId(), commentRequestFilterDto.createdAt()));
     }
 
     @Override
-    @Transactional
     @CacheEvict(value = "commentById", key = "#id")
     public void deleteCommentById(Long id) {
         commentRepository.deleteById(id);

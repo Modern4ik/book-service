@@ -12,7 +12,6 @@ import com.books.holder.repository.CommentRepository;
 import com.books.holder.repository.UserRepository;
 import com.books.holder.service.cache.CacheVersionService;
 import com.books.holder.service.comment.CommentServiceImpl;
-import com.books.holder.specifications.CommentSpecification;
 import com.books.holder.utils.BookTestUtils;
 import com.books.holder.utils.CommentTestUtils;
 import com.books.holder.utils.UserTestUtils;
@@ -38,8 +37,6 @@ public class CommentServiceImplTest {
     private BookRepository bookRepository;
     @Mock
     private UserRepository userRepository;
-    @Mock
-    private CommentSpecification commentSpecification;
     @Spy
     private CacheVersionService cacheVersionService;
     @Spy
@@ -70,11 +67,11 @@ public class CommentServiceImplTest {
 
         CommentResponseDto responseDto = commentService.saveComment(createDto);
         Assertions.assertNotNull(responseDto);
-        Assertions.assertEquals(1L, responseDto.id());
-        Assertions.assertEquals(createDto.content(), responseDto.content());
-        Assertions.assertEquals(createDto.bookId(), responseDto.bookId());
-        Assertions.assertEquals(createDto.userId(), responseDto.userId());
-        Assertions.assertEquals(expectedNewComment.getPostDate(), responseDto.postDate());
+        Assertions.assertEquals(1L, responseDto.getId());
+        Assertions.assertEquals(createDto.content(), responseDto.getContent());
+        Assertions.assertEquals(createDto.bookId(), responseDto.getBookId());
+        Assertions.assertEquals(createDto.userId(), responseDto.getUserId());
+        Assertions.assertEquals(expectedNewComment.getCreatedAt(), responseDto.getCreatedAt());
     }
 
     @Test
@@ -87,8 +84,8 @@ public class CommentServiceImplTest {
 
         CommentResponseDto responseDto = commentService.getCommentById(1L);
         Assertions.assertNotNull(responseDto);
-        Assertions.assertEquals(expectedComment.getId(), responseDto.id());
-        Assertions.assertEquals(expectedComment.getContent(), responseDto.content());
+        Assertions.assertEquals(expectedComment.getId(), responseDto.getId());
+        Assertions.assertEquals(expectedComment.getContent(), responseDto.getContent());
     }
 
     @Test
@@ -96,15 +93,15 @@ public class CommentServiceImplTest {
         CommentRequestFilterDto filterDto =
                 CommentTestUtils.generateFilterDto(2, 2, LocalDateTime.now());
 
-        Mockito.when(commentRepository.findAll(commentSpecification.generateCommentSpec(filterDto)))
+        Mockito.when(commentRepository.findByFilters(filterDto.bookId(), filterDto.userId(), filterDto.createdAt()))
                 .thenReturn(CommentTestUtils.generateCommentsList(filterDto, 3));
 
         List<CommentResponseDto> responseDtoList = commentService.getComments(filterDto);
         Assertions.assertNotNull(responseDtoList);
         Assertions.assertEquals(3, responseDtoList.size());
         for (CommentResponseDto responseDto : responseDtoList) {
-            Assertions.assertEquals(filterDto.bookId(), responseDto.bookId());
-            Assertions.assertEquals(filterDto.userId(), responseDto.userId());
+            Assertions.assertEquals(filterDto.bookId(), responseDto.getBookId());
+            Assertions.assertEquals(filterDto.userId(), responseDto.getUserId());
         }
     }
 

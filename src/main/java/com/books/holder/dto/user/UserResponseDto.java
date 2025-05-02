@@ -1,11 +1,21 @@
 package com.books.holder.dto.user;
 
-import java.time.LocalDate;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-public record UserResponseDto(Long id,
-                              String nickname,
-                              String firstName,
-                              String lastName,
-                              String email,
-                              LocalDate registrationDate) {
+import java.time.LocalDateTime;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class UserResponseDto {
+
+    private Long id;
+    private String nickname;
+    private String firstName;
+    private String lastName;
+    private String email;
+    private LocalDateTime createdAt;
+
 }

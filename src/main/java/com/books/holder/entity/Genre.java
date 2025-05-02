@@ -28,7 +28,9 @@ public class Genre {
     @PreRemove
     private void removeGenreAssociations() {
         for (Book book : books) {
-            book.getGenres().remove(this);
+            if (book != null) {
+                book.getGenres().remove(this);
+            }
         }
     }
 

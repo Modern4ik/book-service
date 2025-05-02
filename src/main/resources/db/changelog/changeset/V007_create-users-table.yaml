@@ -30,7 +30,7 @@ databaseChangeLog:
                     nullable: false
                     unique: true
               - column:
-                  name: registration_date
-                  type: DATE
+                  name: created_at
+                  type: TIMESTAMP
                   constraints:
                     nullable: false

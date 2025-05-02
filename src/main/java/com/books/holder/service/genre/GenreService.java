@@ -7,8 +7,6 @@ import java.util.List;
 
 public interface GenreService {
 
-    String CACHE_NAMESPACE = "genres";
-
     GenreResponseDto saveGenre(GenreRequestCreateDto genreRequestCreateDto);
 
     GenreResponseDto getGenreById(Integer id);

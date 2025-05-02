@@ -44,8 +44,8 @@ public class GenreServiceImplTest {
 
         GenreResponseDto responseDto = genreService.saveGenre(createDto);
         Assertions.assertNotNull(responseDto);
-        Assertions.assertEquals(1, responseDto.id());
-        Assertions.assertEquals(createDto.name(), responseDto.name());
+        Assertions.assertEquals(1, responseDto.getId());
+        Assertions.assertEquals(createDto.name(), responseDto.getName());
     }
 
     @Test
@@ -56,8 +56,8 @@ public class GenreServiceImplTest {
 
         GenreResponseDto responseDto = genreService.getGenreById(1);
         Assertions.assertNotNull(responseDto);
-        Assertions.assertEquals(expectedGenre.getId(), responseDto.id());
-        Assertions.assertEquals(expectedGenre.getName(), responseDto.name());
+        Assertions.assertEquals(expectedGenre.getId(), responseDto.getId());
+        Assertions.assertEquals(expectedGenre.getName(), responseDto.getName());
     }
 
     @Test
@@ -68,8 +68,8 @@ public class GenreServiceImplTest {
 
         GenreResponseDto responseDto = genreService.getGenreByName("Drama");
         Assertions.assertNotNull(responseDto);
-        Assertions.assertEquals(expectedGenre.getId(), responseDto.id());
-        Assertions.assertEquals(expectedGenre.getName(), responseDto.name());
+        Assertions.assertEquals(expectedGenre.getId(), responseDto.getId());
+        Assertions.assertEquals(expectedGenre.getName(), responseDto.getName());
     }
 
     @Test
@@ -81,7 +81,7 @@ public class GenreServiceImplTest {
         List<GenreResponseDto> responseDtoList = genreService.getGenres();
         Assertions.assertNotNull(responseDtoList);
         Assertions.assertEquals(expectedGenres.size(), responseDtoList.size());
-        Assertions.assertEquals(expectedGenres.get(0).getName(), responseDtoList.get(0).name());
+        Assertions.assertEquals(expectedGenres.get(0).getName(), responseDtoList.get(0).getName());
     }
 
     @Test
@@ -92,8 +92,8 @@ public class GenreServiceImplTest {
 
         GenreResponseDto responseDto = genreService.updateGenreNameById(1, "Fantasy");
         Assertions.assertNotNull(responseDto);
-        Assertions.assertEquals(1, responseDto.id());
-        Assertions.assertEquals("Fantasy", responseDto.name());
+        Assertions.assertEquals(1, responseDto.getId());
+        Assertions.assertEquals("Fantasy", responseDto.getName());
     }
 
     @Test

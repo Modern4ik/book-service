@@ -51,8 +51,8 @@ public class CommentControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id").exists())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(1L))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.content").value(createDto.content()))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.bookId").value(expectedResponseDto.bookId()))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.userId").value(expectedResponseDto.userId()));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.bookId").value(expectedResponseDto.getBookId()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.userId").value(expectedResponseDto.getUserId()));
 
     }
 
@@ -67,8 +67,8 @@ public class CommentControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/comments/{id}", 1L))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id").exists())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(expectedDto.id()))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.content").value(expectedDto.content()));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(expectedDto.getId()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.content").value(expectedDto.getContent()));
     }
 
     @Test

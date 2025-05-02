@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
@@ -16,10 +17,16 @@ import java.time.Duration;
 @Configuration
 public class RedisConfig {
 
+    private final Duration cacheTtl;
+
+    public RedisConfig(@Value("${spring.redis.cache-ttl}") Duration cacheTtl) {
+        this.cacheTtl = cacheTtl;
+    }
+
     @Bean
     public RedisCacheConfiguration cacheConfiguration() {
         return RedisCacheConfiguration.defaultCacheConfig()
-                .entryTtl(Duration.ofMinutes(10))
+                .entryTtl(cacheTtl)
                 .disableCachingNullValues()
                 .serializeKeysWith(
                         RedisSerializationContext.SerializationPair.fromSerializer(
@@ -39,7 +46,7 @@ public class RedisConfig {
         objMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
         objMapper.activateDefaultTyping(
                 objMapper.getPolymorphicTypeValidator(),
-                ObjectMapper.DefaultTyping.EVERYTHING,
+                ObjectMapper.DefaultTyping.NON_FINAL,
                 JsonTypeInfo.As.PROPERTY);
 
         return objMapper;

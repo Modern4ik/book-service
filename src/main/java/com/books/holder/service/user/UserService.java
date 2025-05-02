@@ -8,8 +8,6 @@ import java.util.List;
 
 public interface UserService {
 
-    String CACHE_NAMESPACE = "users";
-
     UserResponseDto saveUser(UserRequestCreateDto userRequestCreateDto);
 
     UserResponseDto getUserById(Long id);

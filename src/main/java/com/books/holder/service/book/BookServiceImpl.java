@@ -27,6 +27,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BookServiceImpl implements BookService {
 
+    private static final String CACHE_NAMESPACE = "books";
+
     private final BookRepository bookRepository;
     private final AuthorRepository authorRepository;
     private final GenreRepository genreRepository;
@@ -83,7 +85,6 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    @Transactional
     @CacheEvict(value = "bookById", key = "#id")
     public void deleteBookById(Long id) {
         bookRepository.deleteById(id);

@@ -49,8 +49,8 @@ public class AuthorIntegrationTest {
         AuthorResponseDto authorResponse = authorController.saveAuthor(createDto);
 
         Assertions.assertNotNull(authorResponse);
-        Assertions.assertEquals(5, authorResponse.id());
-        Assertions.assertEquals("Michail", authorResponse.firstName());
+        Assertions.assertEquals(5, authorResponse.getId());
+        Assertions.assertEquals("Michail", authorResponse.getFirstName());
         Assertions.assertEquals(5, authorRepository.count());
     }
 
@@ -59,8 +59,8 @@ public class AuthorIntegrationTest {
         AuthorResponseDto authorResponse = authorController.getAuthorById(1);
 
         Assertions.assertNotNull(authorResponse);
-        Assertions.assertEquals(1, authorResponse.id());
-        Assertions.assertEquals("Unknown", authorResponse.firstName());
+        Assertions.assertEquals(1, authorResponse.getId());
+        Assertions.assertEquals("Unknown", authorResponse.getFirstName());
     }
 
     @Test
@@ -74,8 +74,8 @@ public class AuthorIntegrationTest {
         Assertions.assertNotNull(authorsResponse);
         Assertions.assertEquals(2, authorsResponse.size());
         for (AuthorResponseDto authorResponseDto : authorsResponse) {
-            Assertions.assertEquals(filterDto.firstName(), authorResponseDto.firstName());
-            Assertions.assertEquals(filterDto.birthday(), authorResponseDto.birthday());
+            Assertions.assertEquals(filterDto.firstName(), authorResponseDto.getFirstName());
+            Assertions.assertEquals(filterDto.birthday(), authorResponseDto.getBirthday());
         }
     }
 

@@ -46,8 +46,8 @@ public class GenreControllerTest {
                         .content(objectMapper.writeValueAsString(createDto)))
                 .andExpect(MockMvcResultMatchers.status().isCreated())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id").exists())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(expectedResponseDto.id()))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.name").value(expectedResponseDto.name()));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(expectedResponseDto.getId()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.name").value(expectedResponseDto.getName()));
     }
 
     @Test
@@ -55,14 +55,14 @@ public class GenreControllerTest {
         GenreResponseDto expectedResponseDto =
                 GenreTestUtils.generateGenreResponseDto(1, "Drama");
 
-        Mockito.when(genreService.getGenreById(expectedResponseDto.id()))
+        Mockito.when(genreService.getGenreById(expectedResponseDto.getId()))
                 .thenReturn(expectedResponseDto);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/genres/by-id/{id}", expectedResponseDto.id()))
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/genres/{id}", expectedResponseDto.getId()))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id").exists())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(expectedResponseDto.id()))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.name").value(expectedResponseDto.name()));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(expectedResponseDto.getId()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.name").value(expectedResponseDto.getName()));
     }
 
     @Test
@@ -70,14 +70,14 @@ public class GenreControllerTest {
         GenreResponseDto expectedResponseDto =
                 GenreTestUtils.generateGenreResponseDto(1, "Drama");
 
-        Mockito.when(genreService.getGenreByName(expectedResponseDto.name()))
+        Mockito.when(genreService.getGenreByName(expectedResponseDto.getName()))
                 .thenReturn(expectedResponseDto);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/genres/by-name/{name}", expectedResponseDto.name()))
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/genres/by-name/{name}", expectedResponseDto.getName()))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id").exists())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(expectedResponseDto.id()))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.name").value(expectedResponseDto.name()));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(expectedResponseDto.getId()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.name").value(expectedResponseDto.getName()));
     }
 
     @Test
@@ -100,15 +100,15 @@ public class GenreControllerTest {
         GenreResponseDto expectedResponseDto =
                 GenreTestUtils.generateGenreResponseDto(1, "Fantasy");
 
-        Mockito.when(genreService.updateGenreNameById(expectedResponseDto.id(), expectedResponseDto.name()))
+        Mockito.when(genreService.updateGenreNameById(expectedResponseDto.getId(), expectedResponseDto.getName()))
                 .thenReturn(expectedResponseDto);
 
-        mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/genres/{id}", expectedResponseDto.id())
-                        .param("name", expectedResponseDto.name()))
+        mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/genres/{id}", expectedResponseDto.getId())
+                        .param("name", expectedResponseDto.getName()))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id").exists())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(expectedResponseDto.id()))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.name").value(expectedResponseDto.name()));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(expectedResponseDto.getId()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.name").value(expectedResponseDto.getName()));
     }
 
     @Test

@@ -8,7 +8,6 @@ import com.books.holder.mappers.UserMapperImpl;
 import com.books.holder.repository.UserRepository;
 import com.books.holder.service.cache.CacheVersionService;
 import com.books.holder.service.user.UserServiceImpl;
-import com.books.holder.specifications.UserSpecification;
 import com.books.holder.utils.UserTestUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -19,7 +18,7 @@ import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,8 +27,6 @@ public class UserServiceImplTest {
 
     @Mock
     private UserRepository userRepository;
-    @Mock
-    private UserSpecification userSpecification;
     @Spy
     private CacheVersionService cacheVersionService;
     @Spy
@@ -42,58 +39,60 @@ public class UserServiceImplTest {
     public void shouldSaveUser() {
         UserRequestCreateDto createDto =
                 UserTestUtils.generateUserCreateDto(
-                        "Test user", "Serg", "Zayts", "test@mail.ru", LocalDate.of(2022, 5, 4));
+                        "Test user", "Serg", "Zayts", "test@mail.ru");
         User expectedNewUser =
                 UserTestUtils.generateUser(
-                        1L, createDto.nickname(), createDto.firstName(), createDto.lastName(), createDto.email(), createDto.registrationDate());
+                        1L, createDto.nickname(), createDto.firstName(), createDto.lastName(), createDto.email(), LocalDateTime.now());
 
-        Mockito.when(userRepository.save(userMapper.toEntity(createDto)))
+        Mockito.when(userMapper.toEntity(createDto))
+                .thenReturn(expectedNewUser);
+        Mockito.when(userRepository.save(expectedNewUser))
                 .thenReturn(expectedNewUser);
 
         UserResponseDto responseDto = userService.saveUser(createDto);
         Assertions.assertNotNull(responseDto);
-        Assertions.assertEquals(expectedNewUser.getId(), responseDto.id());
-        Assertions.assertEquals(expectedNewUser.getNickname(), responseDto.nickname());
-        Assertions.assertEquals(expectedNewUser.getEmail(), responseDto.email());
-        Assertions.assertEquals(expectedNewUser.getRegistrationDate(), responseDto.registrationDate());
+        Assertions.assertEquals(expectedNewUser.getId(), responseDto.getId());
+        Assertions.assertEquals(expectedNewUser.getNickname(), responseDto.getNickname());
+        Assertions.assertEquals(expectedNewUser.getEmail(), responseDto.getEmail());
+        Assertions.assertEquals(expectedNewUser.getCreatedAt(), responseDto.getCreatedAt());
     }
 
     @Test
     public void shouldReturnUserById() {
         User expectedUser =
                 UserTestUtils.generateUser(
-                        1L, "Test user", "Serg", "Zayts", "test@mail.ru", LocalDate.of(2022, 4, 5));
+                        1L, "Test user", "Serg", "Zayts", "test@mail.ru", LocalDateTime.now());
 
         Mockito.when(userRepository.findById(1L)).thenReturn(Optional.of(expectedUser));
 
         UserResponseDto responseDto = userService.getUserById(1L);
         Assertions.assertNotNull(responseDto);
-        Assertions.assertEquals(expectedUser.getId(), responseDto.id());
-        Assertions.assertEquals(expectedUser.getNickname(), responseDto.nickname());
+        Assertions.assertEquals(expectedUser.getId(), responseDto.getId());
+        Assertions.assertEquals(expectedUser.getNickname(), responseDto.getNickname());
     }
 
     @Test
-    public void shouldReturnUsersByFirstNameAndRegistrationDate() {
+    public void shouldReturnUsersByFirstNameAndCreatedAt() {
         UserRequestFilterDto filterDto =
-                UserTestUtils.generateUserFilterDto("Sergey", null, LocalDate.of(2022, 4, 5));
+                UserTestUtils.generateUserFilterDto("Sergey", null, LocalDateTime.now());
         List<User> expectedUsers = UserTestUtils.generateUsersList(filterDto, 3);
 
-        Mockito.when(userRepository.findAll(userSpecification.generateUserSpecification(filterDto)))
+        Mockito.when(userRepository.findByFilters(filterDto.firstName(), filterDto.lastName(), filterDto.createdAt()))
                 .thenReturn(expectedUsers);
 
         List<UserResponseDto> responseDtoList = userService.getUsers(filterDto);
         Assertions.assertNotNull(responseDtoList);
         Assertions.assertEquals(3, responseDtoList.size());
         for (UserResponseDto responseDto : responseDtoList) {
-            Assertions.assertEquals(filterDto.firstName(), responseDto.firstName());
-            Assertions.assertEquals(filterDto.registrationDate(), responseDto.registrationDate());
+            Assertions.assertEquals(filterDto.firstName(), responseDto.getFirstName());
+            Assertions.assertEquals(filterDto.createdAt(), responseDto.getCreatedAt());
         }
     }
 
     @Test
     public void shouldDeleteUserById() {
         userService.deleteUserById(1L);
-        
+
         Mockito.verify(userRepository).deleteById(1L);
     }
 }

@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/v1/genres")
+@RequestMapping("/api/v1/genres")
 @RequiredArgsConstructor
 @Validated
 public class GenreController {
@@ -27,7 +27,7 @@ public class GenreController {
         return genreService.saveGenre(genreRequestCreateDto);
     }
 
-    @GetMapping("/by-id/{id}")
+    @GetMapping("/{id}")
     public GenreResponseDto getGenreById(@PathVariable @NotNull Integer id) {
         return genreService.getGenreById(id);
     }

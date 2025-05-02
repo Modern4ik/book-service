@@ -29,7 +29,7 @@ public class Book {
     @Column(name = "publication_year")
     private Integer publicationYear;
 
-    @ManyToMany()
+    @ManyToMany
     @JoinTable(name = "books_genres",
             joinColumns = @JoinColumn(name = "book_id"),
             inverseJoinColumns = @JoinColumn(name = "genre_id"))
@@ -41,8 +41,10 @@ public class Book {
     private List<Comment> comments = new ArrayList<>();
 
     public void addGenre(Genre genre) {
-        genres.add(genre);
-        genre.getBooks().add(this);
+        if (genre != null) {
+            genres.add(genre);
+            genre.getBooks().add(this);
+        }
     }
 
 }

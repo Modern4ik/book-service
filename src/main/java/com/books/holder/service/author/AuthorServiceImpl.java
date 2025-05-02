@@ -22,6 +22,7 @@ import java.util.List;
 public class AuthorServiceImpl implements AuthorService {
 
     private static final int UNKNOWN_AUTHOR_ID = 1;
+    private static final String CACHE_NAMESPACE = "authors";
 
     private final AuthorRepository authorRepository;
     private final AuthorSpecification authorSpecification;
@@ -54,7 +55,6 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
-    @Transactional
     @CacheEvict(value = "authorById", key = "#id")
     public void deleteAuthorById(Integer id) {
         if (id == UNKNOWN_AUTHOR_ID) {
