@@ -1,4 +1,4 @@
-package com.books.holder.service;
+package com.books.holder.service.author;
 
 import com.books.holder.dto.author.AuthorRequestCreateDto;
 import com.books.holder.dto.author.AuthorRequestFilterDto;

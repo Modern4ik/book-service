@@ -1,7 +1,12 @@
 package com.books.holder.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -23,4 +28,23 @@ public class Book {
 
     @Column(name = "publication_year")
     private Integer publicationYear;
+
+    @ManyToMany
+    @JoinTable(name = "books_genres",
+            joinColumns = @JoinColumn(name = "book_id"),
+            inverseJoinColumns = @JoinColumn(name = "genre_id"))
+    private List<Genre> genres = new ArrayList<>();
+
+    @OneToMany(mappedBy = "book",
+            cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
+            orphanRemoval = true)
+    private List<Comment> comments = new ArrayList<>();
+
+    public void addGenre(Genre genre) {
+        if (genre != null) {
+            genres.add(genre);
+            genre.getBooks().add(this);
+        }
+    }
+
 }

@@ -1,10 +1,20 @@
 package com.books.holder.dto.author;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.time.LocalDate;
 
-public record AuthorResponseDto(Integer id,
-                                String firstName,
-                                String lastName,
-                                LocalDate birthday,
-                                String country) {
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class AuthorResponseDto {
+
+    private Integer id;
+    private String firstName;
+    private String lastName;
+    private LocalDate birthday;
+    private String country;
+
 }

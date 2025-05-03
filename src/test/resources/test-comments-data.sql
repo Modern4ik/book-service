@@ -1,0 +1,1 @@
+INSERT INTO comments (content, book_id, user_id, created_at) VALUES ('First comment', 1, 1, CURRENT_TIMESTAMP), ('Second comment', 1, 2, CURRENT_TIMESTAMP), ('Third comment', 1, 1, CURRENT_TIMESTAMP)

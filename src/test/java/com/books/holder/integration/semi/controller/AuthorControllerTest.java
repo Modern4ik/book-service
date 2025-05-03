@@ -3,7 +3,7 @@ package com.books.holder.integration.semi.controller;
 import com.books.holder.controller.AuthorController;
 import com.books.holder.dto.author.AuthorRequestCreateDto;
 import com.books.holder.dto.author.AuthorRequestFilterDto;
-import com.books.holder.service.AuthorService;
+import com.books.holder.service.author.AuthorService;
 import com.books.holder.utils.AuthorTestUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.Matchers;

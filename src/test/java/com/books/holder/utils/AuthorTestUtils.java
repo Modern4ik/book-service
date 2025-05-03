@@ -26,8 +26,7 @@ public class AuthorTestUtils {
         return new AuthorResponseDto(id, firstName, lastName, birthday, country);
     }
 
-    public static Author generateAuthor(Integer id, String firstName, String lastName,
-                                        LocalDate birthday, String country) {
+    public static Author generateAuthor(int id, String firstName, String lastName, LocalDate birthday, String country) {
         return new Author(id, firstName, lastName, birthday, country, new ArrayList<>());
     }
 
@@ -40,22 +39,23 @@ public class AuthorTestUtils {
                     requestDto.firstName(),
                     requestDto.lastName(),
                     requestDto.birthday(),
-                    requestDto.country()));
+                    requestDto.country()
+            ));
         }
 
         return authors;
     }
 
-    public static List<AuthorResponseDto> generateAuthorResponseDtoList(AuthorRequestFilterDto requestDto, int count) {
+    public static List<AuthorResponseDto> generateAuthorResponseDtoList(AuthorRequestFilterDto filerDto, int count) {
         List<AuthorResponseDto> authorResponseDtos = new ArrayList<>();
 
         for (int i = 0; i < count; i++) {
             authorResponseDtos.add(generateAuthorResponseDto(
                     i + 1,
-                    requestDto.firstName(),
-                    requestDto.lastName(),
-                    requestDto.birthday(),
-                    requestDto.country()
+                    filerDto.firstName(),
+                    filerDto.lastName(),
+                    filerDto.birthday(),
+                    filerDto.country()
             ));
         }
 

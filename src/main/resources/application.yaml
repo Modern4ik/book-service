@@ -14,3 +14,12 @@ spring:
       hibernate:
         show_sql: true
         format_sql: true
+
+  redis:
+    host: localhost
+    port: 6379
+    password:
+    cache-ttl: 10m
+
+  cache:
+    type: redis
