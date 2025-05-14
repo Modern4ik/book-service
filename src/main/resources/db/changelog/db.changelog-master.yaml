@@ -12,10 +12,8 @@ databaseChangeLog:
   - include:
       file: db/changelog/changeset/V006_books-not_null-author.yaml
   - include:
-      file: db/changelog/changeset/V007_create-users-table.yaml
+      file: db/changelog/changeset/V007_create-comments-table.yaml
   - include:
-      file: db/changelog/changeset/V008_create-comments-table.yaml
+      file: db/changelog/changeset/V008_create-genres-table.yaml
   - include:
-      file: db/changelog/changeset/V009_create-genres-table.yaml
-  - include:
-      file: db/changelog/changeset/V010_create-books_genres-table.yaml
+      file: db/changelog/changeset/V009_create-books_genres-table.yaml
